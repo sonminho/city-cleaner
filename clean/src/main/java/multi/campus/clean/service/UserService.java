@@ -13,7 +13,7 @@ public interface UserService {
 	int create(User user) throws Exception;
 	
 	// 사용자 계정 업데이트
-	boolean update(User user) throws Exception;
+	int update(User user) throws Exception;
 	
 	// 사용자 계정 삭제
 	boolean delete(User user) throws Exception;

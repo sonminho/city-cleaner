@@ -20,4 +20,15 @@
 		SELECT * FROM clean_user WHERE userid = #{userid}
 	</select>
 	
+	<update id="update" parameterType="User">
+		UPDATE CLEAN_USER SET 
+		 PASSWD=#{passwd}, 
+		 EMAIL=#{email}, 
+		 ADDRESS=#{address},  
+		 BIN=#{bin}, 
+		 LAT=#{lat}, 
+		 LON=#{lon},
+		 PHONE=#{phone} 
+		WHERE USERID=#{userid}
+	</update>
 </mapper>

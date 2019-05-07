@@ -44,9 +44,8 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public boolean update(User user) throws Exception {
-		// TODO Auto-generated method stub
-		return false;
+	public int update(User user) throws Exception {
+		return dao.update(user);
 	}
 
 	@Override

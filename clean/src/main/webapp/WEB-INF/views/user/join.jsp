@@ -132,12 +132,14 @@
 	</nav>
 	<div class="container">
 		<div class="jumbotron">
-			<h4 class="m-4">회원가입</h4>
+			<h3 class="m-4">
+				<i class="fas fa-user-cog"></i> 회원가입
+			</h3>
 			<form:form modelAttribute="user">
 				<div class="form-group m-4">
-					<label for="userid"><i class="fas fa-envelope"></i> 아이디</label>
+					<label for="userid"><i class="far fa-user"></i> 아이디</label>
 					<button type="button" id="userIdCheck"
-						class="btn btn-primary btn-sm m-1 id-check">
+						class="btn btn-dark m-2 id-check">
 						<i class="fas fa-user-check"></i> 중복체크
 					</button>
 					<span id="message"></span>
@@ -166,12 +168,12 @@
 					<form:errors path="address" element="div" cssClass="error" />
 				</div>
 				<div class="form-group m-4">
-					<label for="address"><i class="fas fa-phone"></i> 전화번호</label>
+					<label for="phone"><i class="fas fa-phone"></i> 전화번호</label>
 					<form:input type="phone" path="phone" class="form-control" />
 					<form:errors path="phone" element="div" cssClass="error" />
 				</div>
 				<div class="container text-center mt-4">
-					<button id="submitBtn" type="submit" class="btn btn-info" disabled>회원가입</button>
+					<button id="submitBtn" type="submit" class="btn btn-secondary" disabled>회원가입</button>
 					<button id="cancleBtn" type="button" class="btn btn-danger">다시작성</button>
 				</div>
 			</form:form>

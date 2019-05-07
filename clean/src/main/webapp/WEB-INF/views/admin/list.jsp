@@ -53,10 +53,13 @@ a:visited {
 
 	<div class="container mt-5">
 		<ul class="nav nav-tabs nav-justified">
-			<li class="nav-item"><a class="nav-link active" href="${contextPath}/admin/list"><i class="fas fa-user-friends"></i> 사용자 목록</a>
-			</li>
-			<li class="nav-item"><a class="nav-link" href="#"><i class="fas fa-location-arrow"></i> 관제</a></li>
-			<li class="nav-item"><a class="nav-link" href="#"><i class="fas fa-history"></i> 이용현황</a></li>
+			<li class="nav-item"><a class="nav-link active"
+				href="${contextPath}/admin/list"><i class="fas fa-user-friends"></i>
+					사용자 목록</a></li>
+			<li class="nav-item"><a class="nav-link" href="#"><i
+					class="fas fa-location-arrow"></i> 관제</a></li>
+			<li class="nav-item"><a class="nav-link" href="#"><i
+					class="fas fa-history"></i> 이용현황</a></li>
 			<!-- <li class="nav-item"><a class="nav-link disabled" href="#">Disabled</a>
 			</li> -->
 		</ul>
@@ -73,14 +76,17 @@ a:visited {
 						<th><i class="fas fa-registered"></i> 신청일</th>
 					</tr>
 				</thead>
-				<c:forEach var="user" items="${pi.list }" varStatus="status">
+				<c:forEach var="user" items="${pi.list}" varStatus="status">
 					<tr>
-						<td><a href="#">${user.userid}</a></td>
+						<td><a href="${contextPath}/admin/edit/${user.userid}">${user.userid}</a></td>
 						<td>${user.address}</td>
 						<td>${user.lat}</td>
 						<td>${user.lon}</td>
-						<td><c:if test="${user.bin == 0}">미설치</c:if> <c:if
-								test="${user.bin == 1}">설치완료</c:if></td>
+						<td><c:if test="${user.bin == 0}">
+								<button type="button" class="btn btn-danger btn-sm">미완료</button>
+							</c:if> <c:if test="${user.bin == 1}">
+								<button type="button" class="btn btn-light btn-sm">완료</button>
+							</c:if></td>
 						<td><fmt:formatDate value="${user.regDate}"
 								pattern="yyyy-MM-dd" /></td>
 					</tr>

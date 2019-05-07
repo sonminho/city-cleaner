@@ -64,22 +64,22 @@
 	
 	<div class="container">
 		<div class="jumbotron">
-			<h4 class="m-4">
-				<i class="fas fa-sign-in-alt"></i>로그인
-			</h4>
+			<h3 class="m-3">
+				<i class="fas fa-sign-in-alt"></i> 로그인
+			</h3>
 			<form:form modelAttribute="loginInfo">
 				<div class="form-group m-4">
-					<label for="userid">아이디</label>
+					<label for="userid"><i class="far fa-user"></i> 아이디</label>
 					<form:input path="userid" class="form-control" />
 					<form:errors path="userid" element="div" cssClass="error" />
 				</div>
 				<div class="form-group m-4">
-					<label for="passwd">비밀번호</label>
+					<label for="passwd"><i class="fas fa-lock"></i> 비밀번호</label>
 					<form:input path="passwd" type="password" class="form-control" />
 					<form:errors path="passwd" element="div" cssClass="error" />
 				</div>
 				<div class="container text-center mt-4">
-					<button id="submitBtn" type="submit" class="btn btn-info">로그인</button>
+					<button id="submitBtn" type="submit" class="btn btn-secondary">로그인</button>
 					<button id="cancleBtn" type="button" class="btn btn-danger">다시작성</button>
 				</div>
 			</form:form>
