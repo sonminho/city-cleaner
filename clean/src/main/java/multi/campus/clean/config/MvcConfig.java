@@ -1,0 +1,51 @@
+package multi.campus.clean.config;
+
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
+import org.springframework.web.servlet.config.annotation.ViewResolverRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+
+import multi.campus.clean.interceptor.LoginInterceptor;
+
+@Configuration
+@EnableWebMvc
+@ComponentScan(basePackages = { "multi.campus" })
+@EnableTransactionManagement
+public class MvcConfig implements WebMvcConfigurer {
+
+	@Override
+	public void addResourceHandlers(ResourceHandlerRegistry registry) {
+		// 해당 경로의 파일은 Spring이 해석하지 않음, 정적 파일로 간주
+		// css, js, 이미지 등의 정적 파일 배치 위치 등록 - 스프링이 처리 안함
+		registry.addResourceHandler("/resources/**") // 적용 경로
+				.addResourceLocations("/resources/"); // 웹 경로
+	}
+
+	@Override
+	public void configureViewResolvers(ViewResolverRegistry registry) {
+		// JSP 뷰 리졸버 설정
+		// 뷰 이름 앞,뒤에 붙일 prefix, surfix 설정
+		WebMvcConfigurer.super.configureViewResolvers(registry);
+		registry.jsp("/WEB-INF/views/", ".jsp");
+	}
+
+	@Bean
+	public LoginInterceptor loginInterceptor() {
+		return new LoginInterceptor();
+	}
+	
+	@Override
+	public void addInterceptors(InterceptorRegistry registry) {
+		registry.addInterceptor(loginInterceptor()).
+			addPathPatterns(new String[] {
+			"/aaa"
+		}).excludePathPatterns(new String[] {
+			"/"
+		});
+	}
+}

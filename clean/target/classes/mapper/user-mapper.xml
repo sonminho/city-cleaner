@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="multi.campus.clean.dao.UserDao">
+	<select id="count" resultType="int">
+		SELECT COUNT(*) FROM CLEAN_USER
+	</select>
+	
+	<select id="getPage" resultType="User">
+		select userid, passwd, email, address, lat, lon, bin, phone, reg_date, update_date 
+		from (select row_number() over(order by reg_date desc) as seq, userid, passwd, email, address, lat, lon, bin, phone, reg_date, update_date from clean_user)
+		where seq between #{start} and #{end}
+	</select>
+	
+	<insert id="insert" parameterType="User">
+		INSERT INTO CLEAN_USER (userid, passwd, email, address, phone, reg_date, update_date) 
+		values (#{userid}, #{passwd}, #{email}, #{address}, #{phone}, sysdate, sysdate)
+	</insert>
+	
+	<select id="findById" parameterType="String" resultType="User">
+		SELECT * FROM clean_user WHERE userid = #{userid}
+	</select>
+	
+</mapper>
