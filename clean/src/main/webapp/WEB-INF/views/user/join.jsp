@@ -137,9 +137,9 @@
 			</h3>
 			<form:form modelAttribute="user">
 				<div class="form-group m-4">
-					<label for="userid"><i class="far fa-user"></i> 아이디</label>
+					<label for="userid"><i class="fas fa-user"></i> 아이디</label>
 					<button type="button" id="userIdCheck"
-						class="btn btn-dark m-2 id-check">
+						class="btn btn-dark btn-sm id-check">
 						<i class="fas fa-user-check"></i> 중복체크
 					</button>
 					<span id="message"></span>

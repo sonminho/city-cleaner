@@ -69,7 +69,7 @@
 			</h3>
 			<form:form modelAttribute="loginInfo">
 				<div class="form-group m-4">
-					<label for="userid"><i class="far fa-user"></i> 아이디</label>
+					<label for="userid"><i class="fas fa-user"></i> 아이디</label>
 					<form:input path="userid" class="form-control" />
 					<form:errors path="userid" element="div" cssClass="error" />
 				</div>

@@ -1,13 +1,16 @@
 package multi.campus.clean.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+
+import com.google.gson.Gson;
 
 import lombok.extern.slf4j.Slf4j;
 import multi.campus.clean.domain.PageInfo;
@@ -51,6 +54,20 @@ public class AdminContorller {
 		else {
 			model.addAttribute("user", user);
 			return "admin/edit";
+		}
+	}
+	
+	@GetMapping("/admin/monitor")
+	public void getMonitor(Model model) throws Exception {
+		List<User> list = userService.getUsers();
+		//model.addAttribute("userList", list);
+		Gson gson = new Gson();
+		String gsonList = gson.toJson(list);
+		System.out.println(gsonList);
+		model.addAttribute("userList", gsonList);
+		System.out.println("---쓰레기통 설치 사용자 리스트---");
+		for(User user : list) {
+			System.out.println(user);
 		}
 	}
 }

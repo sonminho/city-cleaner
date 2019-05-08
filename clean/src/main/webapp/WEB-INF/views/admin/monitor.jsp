@@ -30,6 +30,69 @@ a:visited {
 	src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js"></script>
 <script
 	src="https://maxcdn.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js"></script>
+
+<!-- Naver Maps API 키 값 필요 -->
+<script type="text/javascript" src="https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=rbeyz68rf5">
+</script>
+
+<script>
+	$.fn.loadMap = function() {
+		var mapOptions = {
+				center : new naver.maps.LatLng(37.3595704, 127.105399),
+				zoom : 10,
+				zoomControl : true,
+				zoomControlOptions : {
+					style : naver.maps.ZoomControlStyle.SMALL
+				}
+			};
+		var map = new naver.maps.Map('map', mapOptions);
+		
+		return map;
+	}
+	
+	$.fn.getUsers = function(map) {
+		console.log('사용자 목록 불러오기');
+		
+		var userArray = JSON.parse('${userList}');
+		console.log(userArray);
+		
+		var users = new Array();
+		
+		userArray.forEach(user=> {
+			users[user.userid] = user;
+			//console.log(user);
+			
+			// marker 생성			
+			var marker = new naver.maps.Marker({
+				position : new naver.maps.LatLng(user.lat, user.lon),				
+				map : map,
+				icon : {
+					content : '<i class="fas fa-trash-alt" style="color:red;"></i>',
+					size : new naver.maps.Size(22, 35),
+					anchor : new naver.maps.Point(11,35)
+				}
+			});
+			
+			users.marker = marker;
+			console.log(users);
+			
+			naver.maps.Event.addListener(marker, 'click', function(e) {
+				console.log(users);
+			});
+		});
+		
+		return users;
+	}
+	
+	$(function() {
+		var map = $('#map').loadMap();		
+		var users = $('#map').getUsers(map);		
+		
+		console.log(users['abc']);
+	});	
+</script>
+
+
 <body>
 	<nav class="navbar navbar-expand-sm bg-dark navbar-dark">
 		<a class="navbar-brand" href="/clean"><i class="fas fa-recycle"></i>
@@ -52,10 +115,11 @@ a:visited {
 
 	<div class="container mt-5">
 		<ul class="nav nav-tabs nav-justified">
-			<li class="nav-item"><a class="nav-link active"
+			<li class="nav-item"><a class="nav-link"
 				href="${contextPath}/admin/list"><i class="fas fa-user-friends"></i>
 					사용자 목록</a></li>
-			<li class="nav-item"><a class="nav-link" href="${contextPath}/admin/monitor"><i
+			<li class="nav-item"><a class="nav-link active"
+				href="${contextPath}/admin/monitor"><i
 					class="fas fa-location-arrow"></i> 관제</a></li>
 			<li class="nav-item"><a class="nav-link" href="#"><i
 					class="fas fa-history"></i> 이용현황</a></li>
@@ -63,34 +127,8 @@ a:visited {
 			</li> -->
 		</ul>
 
-		<div class="jumbotron mt-5">
-			<table class="table text-center">
-				<thead class="thead-dark">
-					<tr>
-						<th><i class="fas fa-user-friends"></i> 사용자</th>
-						<th><i class="fas fa-map-marker-alt"></i> 주소</th>
-						<th><i class="fas fa-map-marked-alt"></i> 위도</th>
-						<th><i class="fas fa-map-marked-alt"></i> 경도</th>
-						<th><i class="far fa-trash-alt"></i> 설치여부</th>
-						<th><i class="fas fa-registered"></i> 신청일</th>
-					</tr>
-				</thead>
-				<c:forEach var="user" items="${pi.list}" varStatus="status">
-					<tr>
-						<td><a href="${contextPath}/admin/edit/${user.userid}">${user.userid}</a></td>
-						<td>${user.address}</td>
-						<td>${user.lat}</td>
-						<td>${user.lon}</td>
-						<td><c:if test="${user.bin == 0}">
-								<button type="button" class="btn btn-danger btn-sm">미완료</button>
-							</c:if> <c:if test="${user.bin == 1}">
-								<button type="button" class="btn btn-light btn-sm">완료</button>
-							</c:if></td>
-						<td><fmt:formatDate value="${user.regDate}"
-								pattern="yyyy-MM-dd" /></td>
-					</tr>
-				</c:forEach>
-			</table>
+		<div class="jumbotron mt-5 mx-auto">
+			<div id="map" style="width:100%;height:400px;"></div>
 		</div>
 	</div>
 </body>

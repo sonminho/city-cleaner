@@ -31,4 +31,8 @@
 		 PHONE=#{phone} 
 		WHERE USERID=#{userid}
 	</update>
+	
+	<select id="getUsers" resultType="User">
+		SELECT * FROM CLEAN_USER WHERE BIN = 1
+	</select>
 </mapper>

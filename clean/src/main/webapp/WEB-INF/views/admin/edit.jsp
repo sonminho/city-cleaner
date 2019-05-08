@@ -31,7 +31,7 @@ a:visited {
 <script
 	src="https://maxcdn.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js"></script>
 
-<body vlink="black">
+<body>
 	<nav class="navbar navbar-expand-sm bg-dark navbar-dark">
 		<a class="navbar-brand" href="/clean"><i class="fas fa-recycle"></i>
 			깨끗한도시</a>

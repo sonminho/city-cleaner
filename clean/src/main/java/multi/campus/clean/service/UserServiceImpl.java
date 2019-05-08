@@ -54,4 +54,9 @@ public class UserServiceImpl implements UserService {
 		return false;
 	}
 
+	@Override
+	public List<User> getUsers() throws Exception {
+		return dao.getUsers();
+	}
+
 }
