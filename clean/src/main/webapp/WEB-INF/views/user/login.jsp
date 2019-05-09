@@ -79,9 +79,10 @@
 					<form:errors path="passwd" element="div" cssClass="error" />
 				</div>
 				<div class="container text-center mt-4">
+					<form:errors element="div" cssClass="error mb-4" />
 					<button id="submitBtn" type="submit" class="btn btn-secondary">로그인</button>
-					<button id="cancleBtn" type="button" class="btn btn-danger">다시작성</button>
-				</div>
+					<button id="cancleBtn" type="button" class="btn btn-danger">다시작성</button>					
+				</div>				
 			</form:form>
 		</div>
 	</div>

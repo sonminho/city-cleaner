@@ -39,43 +39,62 @@ a:visited {
 			data-target="#collapsibleNavbar">
 			<span class="navbar-toggler-icon"></span>
 		</button>
-
+		
 		<div class="collapse navbar-collapse flex-row-reverse"
 			id="collapsibleNavbar">
-			<ul class="nav navbar-nav float-lg-right">
-				<li class="nav-item mr-sm-2"><button id="loginBtn"
-						type="button" class="btn btn-light m-1">로그인</button></li>
-				<li class="nav-item mr-sm-2"><button id="joinBtn" type="button"
-						class="btn btn-light m-1">회원가입</button></li>
-			</ul>
+			<c:if test="${empty ADMIN}">
+				<ul class="nav navbar-nav float-lg-right">
+					<li class="nav-item mr-sm-2"><button id="loginBtn"
+							type="button" class="btn btn-light m-1">로그인</button></li>
+					<li class="nav-item mr-sm-2"><button id="joinBtn"
+							type="button" class="btn btn-light m-1">회원가입</button></li>
+				</ul>
+			</c:if>
+			<c:if test="${not empty ADMIN}">
+				<ul class="nav navbar-nav float-lg-right">
+					<li class="nav-item mr-sm-2"><a class="nav-link"
+						href="${contextPath}/admin/"> <i class="fas fa-user"></i>${USER.userid}</a></li>
+
+					<li class="nav-item mr-sm-2"><a class="nav-link"
+						href="${contextPath}/user/logout"> <i
+							class="fas fa-sign-out-alt"></i>로그아웃
+					</a></li>
+				</ul>
+			</c:if>
 		</div>
 	</nav>
 
 	<div class="container mt-5">
 		<ul class="nav nav-tabs nav-justified">
-			<li class="nav-item"><a class="nav-link active" href="${contextPath}/admin/list"><i class="fas fa-user-friends"></i> 사용자 목록</a>
-			</li>
-			<li class="nav-item"><a class="nav-link" href="#"><i class="fas fa-location-arrow"></i> 관제</a></li>
-			<li class="nav-item"><a class="nav-link" href="#"><i class="fas fa-history"></i> 이용현황</a></li>
+			<li class="nav-item"><a class="nav-link active"
+				href="${contextPath}/admin/list"><i class="fas fa-user-friends"></i>
+					사용자 목록</a></li>
+			<li class="nav-item"><a class="nav-link" href="#"><i
+					class="fas fa-location-arrow"></i> 관제</a></li>
+			<li class="nav-item"><a class="nav-link" href="#"><i
+					class="fas fa-history"></i> 이용현황</a></li>
 			<!-- <li class="nav-item"><a class="nav-link disabled" href="#">Disabled</a>
 			</li> -->
 		</ul>
 
-		<div class="jumbotron mt-5 mx-auto">		
+		<div class="jumbotron mt-5 mx-auto">
 			<h3 class="m-3">
 				<i class="fas fa-sign-in-alt"></i> 회원정보 수정
 			</h3>
 			<form:form modelAttribute="user">
 				<form:hidden path="userid" class="form-contorl" />
 				<form:hidden path="passwd" class="form-contorl" />
-				
+
 				<div class="form-group m-4">
-					<h4><i class="fas fa-user"></i> ${user.userid}</h4>
+					<h4>
+						<i class="fas fa-user"></i> ${user.userid}
+					</h4>
 				</div>
 				<div class="form-group m-4">
-					<label for="bin"><i class="fas fa-trash"></i> 쓰레기통 설치  여부&nbsp;</label>
-					<form:radiobutton path="bin" value="0" label="미설치"/>
-					<form:radiobutton path="bin" value="1" label="설치"/>
+					<label for="bin"><i class="fas fa-trash"></i> 쓰레기통 설치
+						여부&nbsp;</label>
+					<form:radiobutton path="bin" value="0" label="미설치" />
+					<form:radiobutton path="bin" value="1" label="설치" />
 				</div>
 				<div class="form-group m-4">
 					<label for="email"><i class="fas fa-envelope"></i> 이메일</label>
@@ -83,22 +102,23 @@ a:visited {
 					<form:errors path="email" element="div" cssClass="error" />
 				</div>
 				<div class="form-group m-4">
-					<label for="address"><i class="fas fa-map-marker-alt"></i> 주소</label>
+					<label for="address"><i class="fas fa-map-marker-alt"></i>
+						주소</label>
 					<form:input type="text" path="address" class="form-control" />
 					<form:errors path="address" element="div" cssClass="error" />
 				</div>
 				<div class="form-group m-4">
 					<label for="phone"><i class="fas fa-phone"></i> 전화번호</label>
-					<form:input type="phone" path="phone" class="form-control"/>
+					<form:input type="phone" path="phone" class="form-control" />
 					<form:errors path="phone" element="div" cssClass="error" />
 				</div>
 				<div class="form-group m-4">
 					<label for="lat"><i class="fas fa-map-marked-alt"></i> 위도</label>
-					<form:input type="text" path="lat" class="form-control"/>
+					<form:input type="text" path="lat" class="form-control" />
 				</div>
 				<div class="form-group m-4">
 					<label for="lon"><i class="fas fa-map-marked-alt"></i> 경도</label>
-					<form:input type="text" path="lon" class="form-control"/>
+					<form:input type="text" path="lon" class="form-control" />
 				</div>
 				<div class="container text-center mt-4">
 					<button id="submitBtn" type="submit" class="btn btn-secondary">수정</button>

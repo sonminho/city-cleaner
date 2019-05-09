@@ -10,6 +10,7 @@ import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry
 import org.springframework.web.servlet.config.annotation.ViewResolverRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+import multi.campus.clean.interceptor.AdminInterceptor;
 import multi.campus.clean.interceptor.LoginInterceptor;
 
 @Configuration
@@ -39,13 +40,25 @@ public class MvcConfig implements WebMvcConfigurer {
 		return new LoginInterceptor();
 	}
 	
+	@Bean
+	public AdminInterceptor adminInterceptor() {
+		return new AdminInterceptor();
+	}
+	
 	@Override
 	public void addInterceptors(InterceptorRegistry registry) {
-		registry.addInterceptor(loginInterceptor()).
-			addPathPatterns(new String[] {
-			"/aaa"
+//		registry.addInterceptor(loginInterceptor()).
+//			addPathPatterns(new String[] {
+//			"/aaa"
+//		}).excludePathPatterns(new String[] {
+//			"/"
+//		});
+		
+		registry.addInterceptor(adminInterceptor()).
+		addPathPatterns(new String[] {
+			"/admin/**"		
 		}).excludePathPatterns(new String[] {
-			"/"
+				
 		});
 	}
 }

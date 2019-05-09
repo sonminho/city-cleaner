@@ -32,7 +32,8 @@ a:visited {
 	src="https://maxcdn.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js"></script>
 
 <!-- Naver Maps API 키 값 필요 -->
-<script type="text/javascript" src="https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=rbeyz68rf5">
+<script type="text/javascript"
+	src="https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=rbeyz68rf5">
 </script>
 
 <script>
@@ -67,13 +68,13 @@ a:visited {
 				position : new naver.maps.LatLng(user.lat, user.lon),				
 				map : map,
 				icon : {
-					content : '<i class="fas fa-trash-alt" style="color:red;"></i>',
+					content : '<i class="fas fa-trash-alt" style="color:#BFBEBE;"></i>',
 					size : new naver.maps.Size(22, 35),
 					anchor : new naver.maps.Point(11,35)
 				}
 			});
 			
-			users.marker = marker;
+			users[user.userid].marker = marker;
 			console.log(users);
 			
 			naver.maps.Event.addListener(marker, 'click', function(e) {
@@ -85,8 +86,66 @@ a:visited {
 	}
 	
 	$(function() {
-		var map = $('#map').loadMap();		
-		var users = $('#map').getUsers(map);		
+		var map = $('#map').loadMap();
+		var users = $('#map').getUsers(map);
+		
+		if(!window.WebSocket) {
+			alert('웹 소켓을 지원하지 않는 브라우저 입니다.');
+			return;
+		}
+		
+		var socket = new WebSocket("ws://localhost:8080/clean/admin/monitor/data");
+		
+		socket.onopen = function() {
+			console.log('접속 성공');
+			socket.send('hello');
+		}
+		
+		socket.onclose = function() {
+			console.log('접속 해제')	;
+			socket.send('bye');
+		}
+		
+		socket.onmessage = function(msg) {
+			console.log('데이터 수신 : ', msg.data);
+			
+			var jsonMsg = JSON.parse(msg.data);
+			var user = jsonMsg.userid;
+			var marker = users[user].marker;
+			
+			if(jsonMsg.capacity >= 75) {
+				$('#recv-message').text('RED');
+				
+				marker.setIcon({
+					content : '<i class="fas fa-trash-alt" style="color:#FD2876;"></i>',
+					size : new naver.maps.Size(22, 35),
+					anchor : new naver.maps.Point(11,35)
+				});
+			} else if(jsonMsg.capacity >= 50) {
+				$('#recv-message').text('YELLOW');
+				
+				marker.setIcon({
+					content : '<i class="fas fa-trash-alt" style="color:#F6C501;"></i>',
+					size : new naver.maps.Size(22, 35),
+					anchor : new naver.maps.Point(11,35)
+				});
+			} else {
+				$('#recv-message').text('GREEN');
+				
+				marker.setIcon({
+					content : '<i class="fas fa-trash-alt" style="color:#00FF00;"></i>',
+					size : new naver.maps.Size(22, 35),
+					anchor : new naver.maps.Point(11,35)
+				});
+			}
+			
+			users[user].marker = marker;
+		}
+		
+		$('#send-btn').click(function() {
+			var msg = $('#send-message').val();
+			socket.send(msg);
+		});		
 		
 		console.log(users['abc']);
 	});	
@@ -104,12 +163,25 @@ a:visited {
 
 		<div class="collapse navbar-collapse flex-row-reverse"
 			id="collapsibleNavbar">
-			<ul class="nav navbar-nav float-lg-right">
-				<li class="nav-item mr-sm-2"><button id="loginBtn"
-						type="button" class="btn btn-light m-1">로그인</button></li>
-				<li class="nav-item mr-sm-2"><button id="joinBtn" type="button"
-						class="btn btn-light m-1">회원가입</button></li>
-			</ul>
+			<c:if test="${empty ADMIN}">
+				<ul class="nav navbar-nav float-lg-right">
+					<li class="nav-item mr-sm-2"><button id="loginBtn"
+							type="button" class="btn btn-light m-1">로그인</button></li>
+					<li class="nav-item mr-sm-2"><button id="joinBtn"
+							type="button" class="btn btn-light m-1">회원가입</button></li>
+				</ul>
+			</c:if>
+			<c:if test="${not empty ADMIN}">
+				<ul class="nav navbar-nav float-lg-right">
+					<li class="nav-item mr-sm-2"><a class="nav-link"
+						href="${contextPath}/admin/"> <i class="fas fa-user"></i>${USER.userid}</a></li>
+
+					<li class="nav-item mr-sm-2"><a class="nav-link"
+						href="${contextPath}/user/logout"> <i
+							class="fas fa-sign-out-alt"></i>로그아웃
+					</a></li>
+				</ul>
+			</c:if>
 		</div>
 	</nav>
 
@@ -128,7 +200,16 @@ a:visited {
 		</ul>
 
 		<div class="jumbotron mt-5 mx-auto">
-			<div id="map" style="width:100%;height:400px;"></div>
+			<div id="map" style="width: 100%; height: 400px;"></div>
+		</div>
+
+		<div>
+			전송 메시지 : <input type="text" id="send-message">
+			<button type="button" id="send-btn">전송</button>
+		</div>
+
+		<div>
+			수신 메시지 : <span id="recv-message"></span>
 		</div>
 	</div>
 </body>

@@ -41,12 +41,25 @@ a:visited {
 
 		<div class="collapse navbar-collapse flex-row-reverse"
 			id="collapsibleNavbar">
-			<ul class="nav navbar-nav float-lg-right">
-				<li class="nav-item mr-sm-2"><button id="loginBtn"
-						type="button" class="btn btn-light m-1">로그인</button></li>
-				<li class="nav-item mr-sm-2"><button id="joinBtn" type="button"
-						class="btn btn-light m-1">회원가입</button></li>
-			</ul>
+			<c:if test="${empty ADMIN}">
+				<ul class="nav navbar-nav float-lg-right">
+					<li class="nav-item mr-sm-2"><button id="loginBtn"
+							type="button" class="btn btn-light m-1">로그인</button></li>
+					<li class="nav-item mr-sm-2"><button id="joinBtn"
+							type="button" class="btn btn-light m-1">회원가입</button></li>
+				</ul>
+			</c:if>
+			<c:if test="${not empty ADMIN}">
+				<ul class="nav navbar-nav float-lg-right">
+					<li class="nav-item mr-sm-2"><a class="nav-link"
+						href="${contextPath}/admin/"> <i class="fas fa-user"></i>${USER.userid}</a></li>
+
+					<li class="nav-item mr-sm-2"><a class="nav-link"
+						href="${contextPath}/user/logout"> <i
+							class="fas fa-sign-out-alt"></i>로그아웃
+					</a></li>
+				</ul>
+			</c:if>
 		</div>
 	</nav>
 
@@ -55,7 +68,8 @@ a:visited {
 			<li class="nav-item"><a class="nav-link active"
 				href="${contextPath}/admin/list"><i class="fas fa-user-friends"></i>
 					사용자 목록</a></li>
-			<li class="nav-item"><a class="nav-link" href="${contextPath}/admin/monitor"><i
+			<li class="nav-item"><a class="nav-link"
+				href="${contextPath}/admin/monitor"><i
 					class="fas fa-location-arrow"></i> 관제</a></li>
 			<li class="nav-item"><a class="nav-link" href="#"><i
 					class="fas fa-history"></i> 이용현황</a></li>

@@ -4,7 +4,7 @@ CREATE TABLE clean_user (
   is_admin number default(0),
   passwd varchar(20) not null,
   email varchar(30) not null,
-  address varchar(50),
+  address varchar(100),
   ip varchar(30),
   bin number default(0),
   cap number default(0),
@@ -51,5 +51,7 @@ UPDATE CLEAN_USER SET
 		 PHONE='010-2007-2846' 
 		WHERE USERID='abc';
     rollback;
-    
-select * from clean_user where bin = 1;
+
+select * from clean_user where bin = 0 AND IS_ADMIN = 0;
+update (select * from clean_user where bin = 0) set is_admin = 1;
+commit;

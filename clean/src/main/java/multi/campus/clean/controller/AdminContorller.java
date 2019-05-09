@@ -26,7 +26,7 @@ public class AdminContorller {
 	
 	@GetMapping("/admin")
 	public String getAdmin() {
-		return "admin/main";
+		return "admin/list";
 	}
 	
 	@GetMapping("/admin/list")

@@ -26,7 +26,7 @@ import multi.campus.clean.service.UserService;
 public class UserContorller {
 	@Autowired
 	UserService service;
-	
+
 	@GetMapping("/user/login")
 	public String getLogin(LoginInfo loginInfo, @ModelAttribute("target") String target,
 			@ModelAttribute("reason") String reason) {
@@ -37,8 +37,8 @@ public class UserContorller {
 	}
 
 	@PostMapping("/user/login")
-	public String postLogin(@Valid LoginInfo loginInfo, BindingResult result, HttpServletRequest req, Model model)
-			throws Exception {
+	public String postLogin(@Valid LoginInfo loginInfo, BindingResult result,
+			HttpServletRequest req, Model model) throws Exception {
 		System.out.println("입력받은 회원 " + loginInfo.getUserid());
 
 		if (result.getFieldError("userid") != null || result.getFieldError("passwd") != null) {
@@ -48,26 +48,39 @@ public class UserContorller {
 		}
 
 		User searchedUser = service.getUser(loginInfo.getUserid());
-		// System.out.println("검색된 회원 " + searchedUser);
+		
 		if (searchedUser != null) {
 			String target = loginInfo.getTarget();
+			
 			if (searchedUser.getPasswd().equals(loginInfo.getPasswd())) {
 				HttpSession session = req.getSession();
 				session.setAttribute("USER", searchedUser);
 
-				if (target != null && !target.isEmpty()) {
-					return "redirect:" + target;
-				} else {
-					return "redirect:/";
-				}
+				if (searchedUser.getIsAdmin() == 1) { // 관리자
+					System.out.println("관리자 로그인");
+					session.setAttribute("ADMIN", searchedUser);
+					
+					System.out.println("타겟 >> " + target);
+					
+					if (target != null && !target.isEmpty())
+						return "redirect:" + target;
+					else
+						return "redirect:/admin/";
+				} else { // 일반 사용자
+					if (target != null && !target.isEmpty()) {
+						System.out.println("타겟 출력");
+						return "redirect:" + target;
+					} else {
+						return "redirect:/";
+					}
+				}				
 			}
-			return "redirect:" + target;
-		} else {
-			result.reject("fail", "사용자 아이디 또는 비밀번호가 일치하지 않습니다.");
+			result.reject("fail", "비밀번호가 일치하지 않습니다.");
 			return "/user/login";
 		}
+		result.reject("fail", "사용자 아이디 또는 비밀번호가 일치하지 않습니다.");		
+		return "/user/login";
 	}
-
 
 	@GetMapping("/user/join")
 	public String getJoin(User user) {
@@ -89,7 +102,7 @@ public class UserContorller {
 
 		return "redirect:/";
 	}
-	
+
 	/*
 	 * Ajax request from join.jsp 사용자 아이디 중복확인
 	 */

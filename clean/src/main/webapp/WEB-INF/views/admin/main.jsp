@@ -24,7 +24,8 @@
 
 <body>
 	<nav class="navbar navbar-expand-sm bg-dark navbar-dark">
-		<a class="navbar-brand" href="/clean"><i class="fas fa-recycle"></i> 깨끗한도시</a>
+		<a class="navbar-brand" href="/clean"><i class="fas fa-recycle"></i>
+			깨끗한도시</a>
 		<button class="navbar-toggler" data-toggle="collapse"
 			data-target="#collapsibleNavbar">
 			<span class="navbar-toggler-icon"></span>
@@ -32,12 +33,25 @@
 
 		<div class="collapse navbar-collapse flex-row-reverse"
 			id="collapsibleNavbar">
-			<ul class="nav navbar-nav float-lg-right">
-				<li class="nav-item mr-sm-2"><button id="loginBtn"
-						type="button" class="btn btn-light m-1">로그인</button></li>
-				<li class="nav-item mr-sm-2"><button id="joinBtn" type="button"
-						class="btn btn-light m-1">회원가입</button></li>
-			</ul>
+			<c:if test="${empty ADMIN}">
+				<ul class="nav navbar-nav float-lg-right">
+					<li class="nav-item mr-sm-2"><button id="loginBtn"
+							type="button" class="btn btn-light m-1">로그인</button></li>
+					<li class="nav-item mr-sm-2"><button id="joinBtn"
+							type="button" class="btn btn-light m-1">회원가입</button></li>
+				</ul>
+			</c:if>
+			<c:if test="${not empty ADMIN}">
+				<ul class="nav navbar-nav float-lg-right">
+					<li class="nav-item mr-sm-2"><a class="nav-link"
+						href="${contextPath}/admin/"> <i class="fas fa-user"></i>${USER.userid}</a></li>
+
+					<li class="nav-item mr-sm-2"><a class="nav-link"
+						href="${contextPath}/user/logout"> <i
+							class="fas fa-sign-out-alt"></i>로그아웃
+					</a></li>
+				</ul>
+			</c:if>
 		</div>
 	</nav>
 
