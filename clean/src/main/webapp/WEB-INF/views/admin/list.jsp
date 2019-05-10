@@ -52,7 +52,7 @@ a:visited {
 			<c:if test="${not empty ADMIN}">
 				<ul class="nav navbar-nav float-lg-right">
 					<li class="nav-item mr-sm-2"><a class="nav-link"
-						href="${contextPath}/admin/"> <i class="fas fa-user"></i>${USER.userid}</a></li>
+						href="${contextPath}/admin/"> <i class="fas fa-user"></i>${ADMIN.userid}</a></li>
 
 					<li class="nav-item mr-sm-2"><a class="nav-link"
 						href="${contextPath}/user/logout"> <i

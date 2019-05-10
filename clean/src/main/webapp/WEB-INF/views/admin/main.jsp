@@ -44,11 +44,11 @@
 			<c:if test="${not empty ADMIN}">
 				<ul class="nav navbar-nav float-lg-right">
 					<li class="nav-item mr-sm-2"><a class="nav-link"
-						href="${contextPath}/admin/"> <i class="fas fa-user"></i>${USER.userid}</a></li>
+						href="${contextPath}/admin/"> <i class="fas fa-user"></i>${ADMIN.userid}</a></li>
 
 					<li class="nav-item mr-sm-2"><a class="nav-link"
 						href="${contextPath}/user/logout"> <i
-							class="fas fa-sign-out-alt"></i>로그아웃
+							class="fas fa-sign-out-alt"></i>로그아웃?
 					</a></li>
 				</ul>
 			</c:if>
@@ -56,18 +56,8 @@
 	</nav>
 
 	<div class="container">
-		<div class="jumbotron mt-5">
-			<table class="table">
-				<thead class="thead-dark">
-					<tr>
-						<th>사용자</th>
-						<th>주소</th>
-						<th>위도</th>
-						<th>경도</th>
-						<th>설치여부</th>
-					</tr>
-				</thead>
-			</table>
+		<div class="jumbotron mt-5 content-center">
+			관리자 페이지 입니다 꾸벅
 		</div>
 	</div>
 </body>

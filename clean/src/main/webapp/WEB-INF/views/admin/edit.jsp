@@ -73,8 +73,6 @@ a:visited {
 					class="fas fa-location-arrow"></i> 관제</a></li>
 			<li class="nav-item"><a class="nav-link" href="#"><i
 					class="fas fa-history"></i> 이용현황</a></li>
-			<!-- <li class="nav-item"><a class="nav-link disabled" href="#">Disabled</a>
-			</li> -->
 		</ul>
 
 		<div class="jumbotron mt-5 mx-auto">
@@ -119,6 +117,10 @@ a:visited {
 				<div class="form-group m-4">
 					<label for="lon"><i class="fas fa-map-marked-alt"></i> 경도</label>
 					<form:input type="text" path="lon" class="form-control" />
+				</div>
+				<div class="form-group m-4">
+					<label for="cap">용량</label>
+					<form:input type="text" path="cap" class="form-control" />
 				</div>
 				<div class="container text-center mt-4">
 					<button id="submitBtn" type="submit" class="btn btn-secondary">수정</button>

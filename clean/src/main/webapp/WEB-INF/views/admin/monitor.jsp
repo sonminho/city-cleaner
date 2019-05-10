@@ -6,7 +6,7 @@
 
 <html>
 <head>
-<title>Home</title>
+<title>깨끗한도시</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <style>
 a:link {
@@ -39,7 +39,7 @@ a:visited {
 <script>
 	$.fn.loadMap = function() {
 		var mapOptions = {
-				center : new naver.maps.LatLng(37.3595704, 127.105399),
+				center : new naver.maps.LatLng(37.497818, 127.027614),
 				zoom : 10,
 				zoomControl : true,
 				zoomControlOptions : {
@@ -61,24 +61,56 @@ a:visited {
 		
 		userArray.forEach(user=> {
 			users[user.userid] = user;
-			//console.log(user);
 			
-			// marker 생성			
+			var contentColor;
+			if(user.cap >= 75) {
+				contentColor = '<i class="fas fa-trash-alt" style="color:#FD2876;"></i>';
+			} else if(user.cap >= 50) {
+				contentColor = '<i class="fas fa-trash-alt" style="color:#F6C501;"></i>';
+			} else {
+				contentColor = '<i class="fas fa-trash-alt" style="color:#00FF00;"></i>';
+			}
+			
+			// marker 생성
 			var marker = new naver.maps.Marker({
 				position : new naver.maps.LatLng(user.lat, user.lon),				
 				map : map,
 				icon : {
-					content : '<i class="fas fa-trash-alt" style="color:#BFBEBE;"></i>',
+					content : contentColor,
 					size : new naver.maps.Size(22, 35),
 					anchor : new naver.maps.Point(11,35)
 				}
 			});
 			
-			users[user.userid].marker = marker;
-			console.log(users);
+			var contentString = ['<div class="card">',
+									'<div class="card-body text-center">',
+										'<h4 class="card-title">'+user.userid+'</h4>',
+										'<p class="card-text">'+user.address+'</p>',
+										'<p class="card-text">용량 : '+user.cap+'%</p>',
+										'<button class="btn btn-dark m-1">수거</button>',
+										'<button class="btn btn-danger m-1">취소</button>',
+									'</div>',								
+								'</div>'].join('');
 			
-			naver.maps.Event.addListener(marker, 'click', function(e) {
-				console.log(users);
+			var infoWindow = new naver.maps.InfoWindow({
+				content : contentString 
+			});
+			
+			users[user.userid].marker = marker;
+			users[user.userid].infoWindow = infoWindow;
+			
+			console.log('----------------------------');
+			console.log(users[user.userid].infoWindow);
+			console.log('----------------------------');
+			
+			naver.maps.Event.addListener(users[user.userid].marker, 'click', function(e) {
+				console.log(user.userid);
+				
+				if(infoWindow.getMap()) {
+					users[user.userid].infoWindow.close();
+				} else {
+					users[user.userid].infoWindow.open(map, users[user.userid].marker);
+				}
 			});
 		});
 		
@@ -102,19 +134,47 @@ a:visited {
 		}
 		
 		socket.onclose = function() {
-			console.log('접속 해제')	;
+			console.log('접속 해제');
 			socket.send('bye');
 		}
 		
+		// 웹소켓 메시지 수신시
 		socket.onmessage = function(msg) {
 			console.log('데이터 수신 : ', msg.data);
 			
 			var jsonMsg = JSON.parse(msg.data);
-			var user = jsonMsg.userid;
-			var marker = users[user].marker;
+			var userid = jsonMsg.userid;
+			var marker = users[userid].marker;			
+			users[userid].cap = jsonMsg.capacity;
+			
+			var updateUserCap = {
+					userid : userid,
+					cap : users[userid].cap
+				};
+			
+			console.log(".,,.,.,.,.,.,..,");
+			console.log(updateUserCap);
+			console.log(".,,.,.,.,.,.,..,");
+						
+			$.ajax({
+				type : "GET",
+				url : '${contextPath}/admin/capUpdate',
+				contentType : "application/json",
+				charset : "utf-8",
+				dataType : "text",
+				data : JSON.stringify(updateUserCap),
+				success : function(data) {
+					if(data.result == 'ok') {
+						alert('갱신하였습니다');
+					} else {
+						alert('갱신에 실패하였습니다');
+					}
+				}
+			});
 			
 			if(jsonMsg.capacity >= 75) {
 				$('#recv-message').text('RED');
+				console.log(users[userid].infoWindow.content);				
 				
 				marker.setIcon({
 					content : '<i class="fas fa-trash-alt" style="color:#FD2876;"></i>',
@@ -123,6 +183,7 @@ a:visited {
 				});
 			} else if(jsonMsg.capacity >= 50) {
 				$('#recv-message').text('YELLOW');
+				console.log(users[userid].infoWindow.content);
 				
 				marker.setIcon({
 					content : '<i class="fas fa-trash-alt" style="color:#F6C501;"></i>',
@@ -131,23 +192,51 @@ a:visited {
 				});
 			} else {
 				$('#recv-message').text('GREEN');
+				console.log(users[userid].infoWindow.content);
 				
 				marker.setIcon({
 					content : '<i class="fas fa-trash-alt" style="color:#00FF00;"></i>',
 					size : new naver.maps.Size(22, 35),
 					anchor : new naver.maps.Point(11,35)
 				});
-			}
+			} 
 			
-			users[user].marker = marker;
+			users[userid].infoWindow = new naver.maps.InfoWindow({
+				content : ['<div class="card">',
+					'<div class="card-body text-center">',
+					'<h4 class="card-title">'+userid+'</h4>',
+					'<p class="card-text">'+users[userid].address+'</p>',
+					'<p class="card-text">용량 : '+users[userid].cap+'%</p>',
+					'<button class="btn btn-dark m-1">수거</button>',
+					'<button class="btn btn-danger m-1">취소</button>',
+					'</div>',
+				'</div>'].join('') 
+			});
+			
+			users[userid].cap = jsonMsg.capacity;
+			users[userid].marker = marker;
+			
+			// 기존 마커 리스너를 삭제하고 새로운 마커 리스너를 생성 후 InfoWindow 객체를 등록
+			naver.maps.Event.clearInstanceListeners(users[userid].marker);
+			naver.maps.Event.addListener(users[userid].marker, 'click', function(e) {			
+				if(users[userid].infoWindow.getMap()) {
+					users[userid].infoWindow.close();
+				} else {
+					users[userid].infoWindow.open(map, users[userid].marker);
+				}
+			});
+			
+			if(users[userid].infoWindow.getMap()) {
+				users[userid].infoWindow.close();
+			} else {
+				users[userid].infoWindow.open(map, users[userid].marker);
+			}
 		}
 		
 		$('#send-btn').click(function() {
 			var msg = $('#send-message').val();
 			socket.send(msg);
-		});		
-		
-		console.log(users['abc']);
+		});
 	});	
 </script>
 
@@ -174,7 +263,7 @@ a:visited {
 			<c:if test="${not empty ADMIN}">
 				<ul class="nav navbar-nav float-lg-right">
 					<li class="nav-item mr-sm-2"><a class="nav-link"
-						href="${contextPath}/admin/"> <i class="fas fa-user"></i>${USER.userid}</a></li>
+						href="${contextPath}/admin/"> <i class="fas fa-user"></i>${ADMIN.userid}</a></li>
 
 					<li class="nav-item mr-sm-2"><a class="nav-link"
 						href="${contextPath}/user/logout"> <i
@@ -211,6 +300,8 @@ a:visited {
 		<div>
 			수신 메시지 : <span id="recv-message"></span>
 		</div>
+		<h1>1번 카메라</h1>
+		<img src="${contextPath}/camera/1" width="400" />
 	</div>
 </body>
 </html>

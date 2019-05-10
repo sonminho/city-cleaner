@@ -28,6 +28,7 @@
 		 BIN=#{bin}, 
 		 LAT=#{lat}, 
 		 LON=#{lon},
+		 CAP=#{cap},
 		 PHONE=#{phone} 
 		WHERE USERID=#{userid}
 	</update>

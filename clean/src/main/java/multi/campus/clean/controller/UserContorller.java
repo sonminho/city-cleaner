@@ -53,8 +53,7 @@ public class UserContorller {
 			String target = loginInfo.getTarget();
 			
 			if (searchedUser.getPasswd().equals(loginInfo.getPasswd())) {
-				HttpSession session = req.getSession();
-				session.setAttribute("USER", searchedUser);
+				HttpSession session = req.getSession();			
 
 				if (searchedUser.getIsAdmin() == 1) { // 관리자
 					System.out.println("관리자 로그인");
@@ -67,6 +66,8 @@ public class UserContorller {
 					else
 						return "redirect:/admin/";
 				} else { // 일반 사용자
+					System.out.println("사용자 로그인");
+					session.setAttribute("USER", searchedUser);
 					if (target != null && !target.isEmpty()) {
 						System.out.println("타겟 출력");
 						return "redirect:" + target;

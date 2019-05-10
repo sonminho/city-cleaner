@@ -4,11 +4,13 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
+import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.ViewResolverRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.springframework.web.servlet.view.BeanNameViewResolver;
 
 import multi.campus.clean.interceptor.AdminInterceptor;
 import multi.campus.clean.interceptor.LoginInterceptor;
@@ -31,20 +33,27 @@ public class MvcConfig implements WebMvcConfigurer {
 	public void configureViewResolvers(ViewResolverRegistry registry) {
 		// JSP 뷰 리졸버 설정
 		// 뷰 이름 앞,뒤에 붙일 prefix, surfix 설정
-		WebMvcConfigurer.super.configureViewResolvers(registry);
+		registry.viewResolver(new BeanNameViewResolver());
 		registry.jsp("/WEB-INF/views/", ".jsp");
+	}
+
+	@Bean
+	public CommonsMultipartResolver multipartResolver() {
+		CommonsMultipartResolver resolver = new CommonsMultipartResolver();
+		resolver.setDefaultEncoding("utf-8");
+		return resolver;
 	}
 
 	@Bean
 	public LoginInterceptor loginInterceptor() {
 		return new LoginInterceptor();
 	}
-	
+
 	@Bean
 	public AdminInterceptor adminInterceptor() {
 		return new AdminInterceptor();
 	}
-	
+
 	@Override
 	public void addInterceptors(InterceptorRegistry registry) {
 //		registry.addInterceptor(loginInterceptor()).
@@ -53,12 +62,10 @@ public class MvcConfig implements WebMvcConfigurer {
 //		}).excludePathPatterns(new String[] {
 //			"/"
 //		});
-		
-		registry.addInterceptor(adminInterceptor()).
-		addPathPatterns(new String[] {
-			"/admin/**"		
-		}).excludePathPatterns(new String[] {
-				
-		});
+
+		registry.addInterceptor(adminInterceptor()).addPathPatterns(new String[] { "/admin/**" })
+				.excludePathPatterns(new String[] {
+
+				});
 	}
 }

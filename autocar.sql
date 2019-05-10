@@ -37,6 +37,10 @@ select userid, passwd, email, address, lat, lon, bin, reg_date, update_date
 		from (select row_number() over(order by reg_date asc) as seq, userid, passwd, email, address, lat, lon, bin, reg_date, update_date from clean_user)
 		where seq between 1 and 10;
 
+select userid, is_admin, passwd, email, address, lat, lon, bin, phone, reg_date, update_date 
+		from (select row_number() over(order by reg_date desc) as seq, userid, is_admin, passwd, email, address, lat, lon, bin, phone, reg_date, update_date from clean_user)
+		where seq between 1 and 3 and is_admin=0;
+
 select * from clean_user;
 
 DESC CLEAN_USER;
@@ -54,4 +58,6 @@ UPDATE CLEAN_USER SET
 
 select * from clean_user where bin = 0 AND IS_ADMIN = 0;
 update (select * from clean_user where bin = 0) set is_admin = 1;
+commit;
+insert into clean_user(userid, passwd, email, is_admin) values ('admin', '1234', 'admin@gmail.com', 1);
 commit;

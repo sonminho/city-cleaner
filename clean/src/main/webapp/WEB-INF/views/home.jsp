@@ -38,7 +38,7 @@
 
 <body>
 	<nav class="navbar navbar-expand-sm bg-dark navbar-dark">
-		<a class="navbar-brand" href="/clean">깨끗한도시</a>
+		<a class="navbar-brand" href="/clean"><i class="fas fa-recycle"></i>깨끗한도시</a>
 		<button class="navbar-toggler" data-toggle="collapse"
 			data-target="#collapsibleNavbar">
 			<span class="navbar-toggler-icon"></span>
@@ -46,7 +46,7 @@
 
 		<div class="collapse navbar-collapse flex-row-reverse"
 			id="collapsibleNavbar">
-			<c:if test="${empty USER}">
+			<c:if test="${empty USER && empty ADMIN}">
 				<ul class="nav navbar-nav float-lg-right">
 					<li class="nav-item mr-sm-2"><button id="loginBtn"
 							type="button" class="btn btn-light m-1">로그인</button></li>
@@ -65,34 +65,63 @@
 					</a></li>
 				</ul>
 			</c:if>
+			<c:if test="${not empty ADMIN}">
+				<ul class="nav navbar-nav float-lg-right">
+					<li class="nav-item mr-sm-2"><a class="nav-link"
+						href="${contextPath}/admin/"> <i class="fas fa-user"></i>${ADMIN.userid}</a></li>
+
+					<li class="nav-item mr-sm-2"><a class="nav-link"
+						href="${contextPath}/user/logout"> <i
+							class="fas fa-sign-out-alt"></i>로그아웃
+					</a></li>
+				</ul>
+			</c:if>
 		</div>
 	</nav>
 	<div class="container">
-		<br />
-		<div id="home" class="carousel slide" data-ride="carousel">
-			<!-- Indicators -->
-			<ul class="carousel-indicators">
-				<li data-target="#home" data-slide-to="0" class="active"></li>
-				<li data-target="#home" data-slide-to="1"></li>
-			</ul>
-
-			<!-- The slideshow -->
-			<div class="carousel-inner">
-				<div class="carousel-item active">
-					<img src="resources/home1.JPG">
-				</div>
-				<div class="carousel-item">
-					<img src="resources/home2.JPG">
+		<!-- Full Page Image Header with Vertically Centered Content -->
+		<header class="masthead">
+			<div class="container h-100">
+				<div class="row h-100 align-items-center">
+					<div class="col-12 text-center">
+						<h1 class="font-weight-light">클린 시티 프로젝트</h1>
+						<p class="lead">자율주행을 활용한 IoT 쓰레기 수거 트럭 개발</p>
+					</div>
 				</div>
 			</div>
+		</header>
 
-			<!-- Left and right controls -->
-			<a class="carousel-control-prev" href="#home" data-slide="prev">
-				<span class="carousel-control-prev-icon"></span>
-			</a> <a class="carousel-control-next" href="#home" data-slide="next">
-				<span class="carousel-control-next-icon"></span>
-			</a>
-		</div>
+		<!-- Page Content -->
+		<section id="about">
+			<div class="container">
+				<h2 class="font-weight-light text-center mb-3">About</h2>
+				<h4>우리의 프로젝트 목표는 자율주행 기술을 활용하여 도시 전역의 쓰레기를 효과적으로 수거하는 것입니다.</h4>
+			</div>
+		</section>
+
+		<section id="services">
+			<div class="container">
+				<div class="row">
+					<div class="col-lg-12">
+						<h2 class="font-weight-light text-center mb-3">Service</h2>
+					</div>
+				</div>
+				<div class="row text-center">
+					<div class="col-4">
+						<i class="fas fa-map-marked-alt fa-4x"></i>
+						<h2 class="global-positioning">위치 확인</h2>
+					</div>
+					<div class="col-4">
+						<i class="fas fa-users fa-4x"></i>
+						<h2 class="remote">원격 주행</h2>
+					</div>
+					<div class="col-4">
+						<i class="fas fa-database fa-4x"></i>
+						<h2 class="dashboard">수거 현황</h2>
+					</div>
+				</div>
+			</div>
+		</section>
 	</div>
 
 </body>

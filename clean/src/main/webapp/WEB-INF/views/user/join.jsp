@@ -43,7 +43,7 @@
 				dataType : "text",
 				success : function(data) {
 					data = JSON.parse(data);
-					console.log(data.result);
+					
 					if (data.result == 'ok') {
 						console.log(data.message);
 						msgSpan.html(data.message).removeClass('.error');
