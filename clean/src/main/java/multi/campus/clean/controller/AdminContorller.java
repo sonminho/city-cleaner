@@ -9,6 +9,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -29,7 +30,7 @@ public class AdminContorller {
 	
 	@GetMapping("/admin")
 	public String getAdmin() {
-		return "admin/list";
+		return "redirect:/admin/list";
 	}
 	
 	@GetMapping("/admin/list")
@@ -63,28 +64,26 @@ public class AdminContorller {
 	@GetMapping("/admin/monitor")
 	public void getMonitor(Model model) throws Exception {
 		List<User> list = userService.getUsers();
-		//model.addAttribute("userList", list);
+		
 		Gson gson = new Gson();
 		String gsonList = gson.toJson(list);
-		System.out.println(gsonList);
 		model.addAttribute("userList", gsonList);
-		System.out.println("---쓰레기통 설치 사용자 리스트---");
-		for(User user : list) {
-			System.out.println(user);
-		}
 	}
 	
 	
-	@GetMapping("/admin/capUpdate")
+	@PostMapping("/admin/capUpdate")
 	@ResponseBody
-	public ResponseEntity<ResultMsg> checkId(User user) throws Exception {	    
-		System.out.println("사용자로부터 입력 받은 아이디 " + user.getUserid());
-		if (userService.getUser(user.getUserid()) == null) {
-			System.out.println("사용가능한 아이디");
-			return ResultMsg.response("ok", "사용가능한 아이디 입니다.");
+	public ResponseEntity<ResultMsg> checkId(@RequestBody User user) throws Exception {	    
+		System.out.println("사용자로부터 입력 받은 아이디 " + user.getUserid() + " 용량 :" + user.getCap());
+		User searchedUser = userService.getUser(user.getUserid());
+		System.out.println("검색된 회원 " + searchedUser);
+		
+		if (searchedUser != null) {
+			searchedUser.setCap(user.getCap());
+			userService.update(searchedUser);
+			return ResultMsg.response("ok", "갱신되었습니다.");
 		} else {
-			System.out.println("사용 불가능한 아이디");
-			return ResultMsg.response("duplicate", "이미 사용중인 아이디 입니다.");
+			return ResultMsg.response("fail", "잘못된 접근입니다.");
 		}
 	}
 	

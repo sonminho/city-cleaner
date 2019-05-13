@@ -39,7 +39,7 @@ a:visited {
 			data-target="#collapsibleNavbar">
 			<span class="navbar-toggler-icon"></span>
 		</button>
-		
+
 		<div class="collapse navbar-collapse flex-row-reverse"
 			id="collapsibleNavbar">
 			<c:if test="${empty ADMIN}">
@@ -69,8 +69,8 @@ a:visited {
 			<li class="nav-item"><a class="nav-link active"
 				href="${contextPath}/admin/list"><i class="fas fa-user-friends"></i>
 					사용자 목록</a></li>
-			<li class="nav-item"><a class="nav-link" href="#"><i
-					class="fas fa-location-arrow"></i> 관제</a></li>
+			<li class="nav-item"><a class="nav-link"
+				href="${contextPath}/admin/monitor"><i class="fas fa-location-arrow"></i> 관제</a></li>
 			<li class="nav-item"><a class="nav-link" href="#"><i
 					class="fas fa-history"></i> 이용현황</a></li>
 		</ul>

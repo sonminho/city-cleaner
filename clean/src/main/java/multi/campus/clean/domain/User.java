@@ -22,7 +22,9 @@ public class User {
 	String passwdCheck;
 	@Email(message="email 형식이 아닙니다.")
 	String email;
+	@NotEmpty(message="주소를  입력하세요.")
 	String address;
+	@NotEmpty(message="전화번호를 입력하세요.")
 	String phone;
 	String ip;
 	int bin;

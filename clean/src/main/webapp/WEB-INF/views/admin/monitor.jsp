@@ -54,9 +54,7 @@ a:visited {
 	$.fn.getUsers = function(map) {
 		console.log('사용자 목록 불러오기');
 		
-		var userArray = JSON.parse('${userList}');
-		console.log(userArray);
-		
+		var userArray = JSON.parse('${userList}');		
 		var users = new Array();
 		
 		userArray.forEach(user=> {
@@ -130,12 +128,12 @@ a:visited {
 		
 		socket.onopen = function() {
 			console.log('접속 성공');
-			socket.send('hello');
+			socket.send('browser');
 		}
 		
 		socket.onclose = function() {
 			console.log('접속 해제');
-			socket.send('bye');
+			socket.send('termination');
 		}
 		
 		// 웹소켓 메시지 수신시
@@ -150,21 +148,19 @@ a:visited {
 			var updateUserCap = {
 					userid : userid,
 					cap : users[userid].cap
-				};
+			};
 			
-			console.log(".,,.,.,.,.,.,..,");
-			console.log(updateUserCap);
-			console.log(".,,.,.,.,.,.,..,");
-						
 			$.ajax({
-				type : "GET",
+				type : "POST",
 				url : '${contextPath}/admin/capUpdate',
 				contentType : "application/json",
 				charset : "utf-8",
 				dataType : "text",
 				data : JSON.stringify(updateUserCap),
-				success : function(data) {
-					if(data.result == 'ok') {
+				success : function(response) {
+					var res = JSON.parse(response);
+					console.log(res);
+					if(res.result == 'ok') {
 						alert('갱신하였습니다');
 					} else {
 						alert('갱신에 실패하였습니다');
@@ -287,21 +283,22 @@ a:visited {
 			<!-- <li class="nav-item"><a class="nav-link disabled" href="#">Disabled</a>
 			</li> -->
 		</ul>
-
-		<div class="jumbotron mt-5 mx-auto">
+		
+		<div class="jumbotron mt-5 text-center">
 			<div id="map" style="width: 100%; height: 400px;"></div>
+			<br/>
+			<div>
+				전송 메시지 : <input type="text" id="send-message">
+				<button type="button" id="send-btn">전송</button>
+			</div>
+			<br/>
+			<div>
+				수신 메시지 : <span id="recv-message"></span>
+			</div>
+			<br/>
+			<h4>차량 카메라</h4>
+			<img src="${contextPath}/camera/1" class="mx-auto d-block" style="width: 100%; height: 600px;"/>
 		</div>
-
-		<div>
-			전송 메시지 : <input type="text" id="send-message">
-			<button type="button" id="send-btn">전송</button>
-		</div>
-
-		<div>
-			수신 메시지 : <span id="recv-message"></span>
-		</div>
-		<h1>1번 카메라</h1>
-		<img src="${contextPath}/camera/1" width="400" />
 	</div>
 </body>
 </html>
