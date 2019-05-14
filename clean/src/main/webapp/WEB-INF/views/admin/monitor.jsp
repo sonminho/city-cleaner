@@ -128,7 +128,7 @@ a:visited {
 		
 		socket.onopen = function() {
 			console.log('접속 성공');
-			socket.send('browser');
+			socket.send('{"type":"browser"}');
 		}
 		
 		socket.onclose = function() {
@@ -233,6 +233,23 @@ a:visited {
 			var msg = $('#send-message').val();
 			socket.send(msg);
 		});
+		
+		$('#forward-btn').click(function() {
+			alert('△');
+			socket.send('{"type":"direction","message":"forward"}');
+		});
+		$('#left-btn').click(function() {
+			alert('◁');
+			socket.send('{"type":"direction","message":"turnleft"}');
+		});
+		$('#back-btn').click(function() {
+			alert('▽');
+			socket.send('{"type":"direction","message":"back"}');
+		});
+		$('#right-btn').click(function() {
+			alert('▷');
+			socket.send('{"type":"direction","message":"turnright"}');
+		});
 	});	
 </script>
 
@@ -283,21 +300,29 @@ a:visited {
 			<!-- <li class="nav-item"><a class="nav-link disabled" href="#">Disabled</a>
 			</li> -->
 		</ul>
-		
+
 		<div class="jumbotron mt-5 text-center">
 			<div id="map" style="width: 100%; height: 400px;"></div>
-			<br/>
+			<br />
 			<div>
 				전송 메시지 : <input type="text" id="send-message">
 				<button type="button" id="send-btn">전송</button>
 			</div>
-			<br/>
+			<br />
 			<div>
 				수신 메시지 : <span id="recv-message"></span>
 			</div>
-			<br/>
+			<br />
 			<h4>차량 카메라</h4>
-			<img src="${contextPath}/camera/1" class="mx-auto d-block" style="width: 100%; height: 600px;"/>
+			<br /> <img src="${contextPath}/camera/1" class="mx-auto d-block"
+				style="width: 100%; height: 600px;" /> <br />
+			<h4>수동조작</h4>
+			<br />
+			<button id="forward-btn" type="button" class="btn btn-dark">↑</button>
+			<br />
+			<button id="left-btn" type="button" class="btn btn-dark mt-1">←</button>
+			<button id="back-btn" type="button" class="btn btn-dark mt-1">↓</button>
+			<button id="right-btn" type="button" class="btn btn-dark mt-1">→</button>
 		</div>
 	</div>
 </body>
