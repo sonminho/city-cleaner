@@ -127,12 +127,12 @@ a:visited {
 		var socket = new WebSocket("ws://localhost:8080/clean/admin/monitor/data");
 		
 		socket.onopen = function() {
-			console.log('접속 성공');
+			console.log('웹소켓 접속 성공');
 			socket.send('{"type":"browser"}');
 		}
 		
 		socket.onclose = function() {
-			console.log('접속 해제');
+			console.log('웹소켓 접속 해제');
 			socket.send('termination');
 		}
 		
@@ -143,12 +143,12 @@ a:visited {
 			var jsonMsg = JSON.parse(msg.data);
 			var userid = jsonMsg.userid;
 			var marker = users[userid].marker;			
-			users[userid].cap = jsonMsg.capacity;
+			users[userid].cap = jsonMsg.cap;
 			
 			var updateUserCap = {
 					userid : userid,
 					cap : users[userid].cap
-			};
+			};			
 			
 			$.ajax({
 				type : "POST",
@@ -168,7 +168,7 @@ a:visited {
 				}
 			});
 			
-			if(jsonMsg.capacity >= 75) {
+			if(jsonMsg.cap >= 75) {
 				$('#recv-message').text('RED');
 				console.log(users[userid].infoWindow.content);				
 				
@@ -177,7 +177,7 @@ a:visited {
 					size : new naver.maps.Size(22, 35),
 					anchor : new naver.maps.Point(11,35)
 				});
-			} else if(jsonMsg.capacity >= 50) {
+			} else if(jsonMsg.cap >= 50) {
 				$('#recv-message').text('YELLOW');
 				console.log(users[userid].infoWindow.content);
 				
@@ -209,7 +209,7 @@ a:visited {
 				'</div>'].join('') 
 			});
 			
-			users[userid].cap = jsonMsg.capacity;
+			users[userid].cap = jsonMsg.cap;
 			users[userid].marker = marker;
 			
 			// 기존 마커 리스너를 삭제하고 새로운 마커 리스너를 생성 후 InfoWindow 객체를 등록
@@ -231,7 +231,8 @@ a:visited {
 		
 		$('#send-btn').click(function() {
 			var msg = $('#send-message').val();
-			socket.send(msg);
+			console.log('{"type":"binData", "message":"", "userid":"abc2", "cap":40}');
+			socket.send('{"type":"binData", "message":"", "userid":"abc2", "cap":90}');
 		});
 		
 		$('#forward-btn').click(function() {
@@ -250,6 +251,7 @@ a:visited {
 			alert('▷');
 			socket.send('{"type":"direction","message":"turnright"}');
 		});
+		
 	});	
 </script>
 
@@ -318,11 +320,13 @@ a:visited {
 				style="width: 100%; height: 600px;" /> <br />
 			<h4>수동조작</h4>
 			<br />
-			<button id="forward-btn" type="button" class="btn btn-dark">↑</button>
+			<button id="forward-btn" type="button" class="btn btn-dark"><i class="fas fa-arrow-up"></i></button>
 			<br />
-			<button id="left-btn" type="button" class="btn btn-dark mt-1">←</button>
-			<button id="back-btn" type="button" class="btn btn-dark mt-1">↓</button>
-			<button id="right-btn" type="button" class="btn btn-dark mt-1">→</button>
+			<button id="left-btn" type="button" class="btn btn-dark mt-1"><i class="fas fa-arrow-left"></i></button>
+			<button id="back-btn" type="button" class="btn btn-dark mt-1"><i class="fas fa-redo"></i></button>
+			<button id="right-btn" type="button" class="btn btn-dark mt-1"><i class="fas fa-arrow-right"></i></button>
+			<br />
+			<button id="stop-btn" type="button" class="btn btn-danger mt-1"><i class="far fa-stop-circle"></i></button>
 		</div>
 	</div>
 </body>

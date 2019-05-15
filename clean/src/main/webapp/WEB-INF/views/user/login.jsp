@@ -67,7 +67,15 @@
 			<h3 class="m-3">
 				<i class="fas fa-sign-in-alt"></i> 로그인
 			</h3>
+			
+			<c:if test="${not empty loginInfo.target}">
+				<div class="alert alert-warning">
+					<strong>${loginInfo.reason}</strong>
+				</div>
+			</c:if>
+			
 			<form:form modelAttribute="loginInfo">
+				<form:hidden path="target"/>
 				<div class="form-group m-4">
 					<label for="userid"><i class="fas fa-user"></i> 아이디</label>
 					<form:input path="userid" class="form-control" />

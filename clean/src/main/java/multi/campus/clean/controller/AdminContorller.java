@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.google.gson.Gson;
 
 import lombok.extern.slf4j.Slf4j;
+import multi.campus.clean.domain.HandleMsg;
 import multi.campus.clean.domain.PageInfo;
 import multi.campus.clean.domain.ResultMsg;
 import multi.campus.clean.domain.User;
@@ -73,7 +74,7 @@ public class AdminContorller {
 	
 	@PostMapping("/admin/capUpdate")
 	@ResponseBody
-	public ResponseEntity<ResultMsg> checkId(@RequestBody User user) throws Exception {	    
+	public ResponseEntity<ResultMsg> checkId(@RequestBody HandleMsg user) throws Exception {	    
 		System.out.println("사용자로부터 입력 받은 아이디 " + user.getUserid() + " 용량 :" + user.getCap());
 		User searchedUser = userService.getUser(user.getUserid());
 		System.out.println("검색된 회원 " + searchedUser);

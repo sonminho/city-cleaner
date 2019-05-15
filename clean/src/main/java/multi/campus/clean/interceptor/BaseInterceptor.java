@@ -32,7 +32,7 @@ public class BaseInterceptor extends HandlerInterceptorAdapter {
 		FlashMap flashMap = new FlashMap();
 		flashMap.put("target", target);
 		flashMap.put("reason", reason);
-		
+		System.out.println("리다이렉트시 타겟 > " + target +", 이유 > " + reason);
 		FlashMapManager flashMapManager = RequestContextUtils.getFlashMapManager(request);
 		flashMapManager.saveOutputFlashMap(flashMap, request, response);
 	}
@@ -41,6 +41,7 @@ public class BaseInterceptor extends HandlerInterceptorAdapter {
 	void redirect(HttpServletRequest request, HttpServletResponse response, String target, String reason) throws Exception {
 		String url = getUrl(request);
 		saveFlash(request, response, url, reason);
+		System.out.println("리다이렉트시 타겟url > " + url +", 이유 > " + reason);
 		response.sendRedirect(context.getContextPath() + target);
 	}
 }

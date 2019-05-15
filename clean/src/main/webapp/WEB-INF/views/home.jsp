@@ -57,7 +57,7 @@
 			<c:if test="${not empty USER}">
 				<ul class="nav navbar-nav float-lg-right">
 					<li class="nav-item mr-sm-2"><a class="nav-link"
-						href="${contextPath}/user/"> <i class="fas fa-user"></i>${USER.userid}</a></li>
+						href="${contextPath}/user/mypage/${USER.userid}"> <i class="fas fa-user"></i>${USER.userid}</a></li>
 
 					<li class="nav-item mr-sm-2"><a class="nav-link"
 						href="${contextPath}/user/logout"> <i

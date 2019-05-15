@@ -32,14 +32,14 @@ public class UserContorller {
 			@ModelAttribute("reason") String reason) {
 		loginInfo.setTarget(target);
 		loginInfo.setReason(reason);
-
+		System.out.println("사용자 컨르롤러에서 " +target+","+reason);
 		return "/user/login";
 	}
 
 	@PostMapping("/user/login")
 	public String postLogin(@Valid LoginInfo loginInfo, BindingResult result,
 			HttpServletRequest req, Model model) throws Exception {
-		System.out.println("입력받은 회원 " + loginInfo.getUserid());
+		System.out.println("입력받은 회원 " + loginInfo.getUserid() + ", 타겟 " + loginInfo.getTarget());
 
 		if (result.getFieldError("userid") != null || result.getFieldError("passwd") != null) {
 			log.info("[사용자 로그인] : 잘못된 입력");
@@ -68,6 +68,7 @@ public class UserContorller {
 				} else { // 일반 사용자
 					System.out.println("사용자 로그인");
 					session.setAttribute("USER", searchedUser);
+					
 					if (target != null && !target.isEmpty()) {
 						System.out.println("타겟 출력");
 						return "redirect:" + target;
@@ -125,5 +126,12 @@ public class UserContorller {
 		session.invalidate();
 		System.out.println("로그아웃");
 		return "redirect:/";
+	}
+	
+	@GetMapping("/user/mypage/{userid}")
+	public String getMyPage(@PathVariable String userid) throws Exception {
+		
+		
+		return "/user/mypage";
 	}
 }

@@ -10,4 +10,6 @@ import lombok.NoArgsConstructor;
 public class HandleMsg {
 	String type;
 	String message;
+	String userid;
+	double cap;
 }
