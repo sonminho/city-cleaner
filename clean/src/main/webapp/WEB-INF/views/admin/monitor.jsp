@@ -56,9 +56,10 @@ a:visited {
 		
 		var userArray = JSON.parse('${userList}');		
 		var users = new Array();
-		
-		userArray.forEach(user=> {
-			users[user.userid] = user;
+				
+		userArray.forEach(user=> {			
+			var userid = user.userid;
+			users[user.userid] = user;			
 			
 			var contentColor;
 			if(user.cap >= 75) {
@@ -85,8 +86,8 @@ a:visited {
 										'<h4 class="card-title">'+user.userid+'</h4>',
 										'<p class="card-text">'+user.address+'</p>',
 										'<p class="card-text">용량 : '+user.cap+'%</p>',
-										'<button class="btn btn-dark m-1">수거</button>',
-										'<button class="btn btn-danger m-1">취소</button>',
+										'<button id="info-plus-btn" class="btn btn-dark m-1">수거</button>',
+										'<button id="info-cancle-btn" class="btn btn-danger m-1">취소</button>',
 									'</div>',								
 								'</div>'].join('');
 			
@@ -94,20 +95,38 @@ a:visited {
 				content : contentString 
 			});
 			
+			marker.htmlData = contentString;
+			
 			users[user.userid].marker = marker;
-			users[user.userid].infoWindow = infoWindow;
+			//users[user.userid].infoWindow = infoWindow;
 			
 			console.log('----------------------------');
 			console.log(users[user.userid].infoWindow);
+			console.log(users[user.userid].marker);
 			console.log('----------------------------');
-			
-			naver.maps.Event.addListener(users[user.userid].marker, 'click', function(e) {
-				console.log(user.userid);
+						
+			naver.maps.Event.addListener(users[userid].marker, 'click', function(e) {			
+				var infoWindowElement;
 				
+				// 맵에 마커의 윈도우창이 열려있으면
 				if(infoWindow.getMap()) {
-					users[user.userid].infoWindow.close();
+					infoWindowElement = infoWindow.getElement();
+					$(infoWindowElement).off('click', '#info-plus-btn');
+					$(infoWindowElement).off('click', '#info-cancle-btn');
+					infoWindow.close();
 				} else {
-					users[user.userid].infoWindow.open(map, users[user.userid].marker);
+					infoWindow.open(map, users[userid].marker);					
+					infoWindowElement = infoWindow.getElement();
+					$(infoWindowElement).off('click', '#info-plus-btn');
+					$(infoWindowElement).off('click', '#info-cancle-btn');
+					$(infoWindowElement).on('click', '#info-plus-btn', function() {
+						alert(users[userid].userid);
+					});
+					
+					$(infoWindowElement).on('click', '#info-cancle-btn', function() {
+						alert(users[userid].userid + "닫힘");
+						infoWindow.close();
+					});
 				}
 			});
 		});
@@ -115,7 +134,7 @@ a:visited {
 		return users;
 	}
 	
-	$(function() {
+	$(function() {		
 		var map = $('#map').loadMap();
 		var users = $('#map').getUsers(map);
 		
@@ -139,7 +158,7 @@ a:visited {
 		// 웹소켓 메시지 수신시
 		socket.onmessage = function(msg) {
 			console.log('데이터 수신 : ', msg.data);
-			
+			var contentString;
 			var jsonMsg = JSON.parse(msg.data);
 			var userid = jsonMsg.userid;
 			var marker = users[userid].marker;			
@@ -150,6 +169,7 @@ a:visited {
 					cap : users[userid].cap
 			};			
 			
+			// 쓰레기통 용량 업데이트
 			$.ajax({
 				type : "POST",
 				url : '${contextPath}/admin/capUpdate',
@@ -166,11 +186,11 @@ a:visited {
 						alert('갱신에 실패하였습니다');
 					}
 				}
-			});
+			});		
 			
+			// 마커 아이콘 설정
 			if(jsonMsg.cap >= 75) {
-				$('#recv-message').text('RED');
-				console.log(users[userid].infoWindow.content);				
+				$('#recv-message').text('RED');	
 				
 				marker.setIcon({
 					content : '<i class="fas fa-trash-alt" style="color:#FD2876;"></i>',
@@ -179,7 +199,6 @@ a:visited {
 				});
 			} else if(jsonMsg.cap >= 50) {
 				$('#recv-message').text('YELLOW');
-				console.log(users[userid].infoWindow.content);
 				
 				marker.setIcon({
 					content : '<i class="fas fa-trash-alt" style="color:#F6C501;"></i>',
@@ -188,25 +207,26 @@ a:visited {
 				});
 			} else {
 				$('#recv-message').text('GREEN');
-				console.log(users[userid].infoWindow.content);
 				
 				marker.setIcon({
 					content : '<i class="fas fa-trash-alt" style="color:#00FF00;"></i>',
 					size : new naver.maps.Size(22, 35),
 					anchor : new naver.maps.Point(11,35)
 				});
-			} 
+			}
 			
-			users[userid].infoWindow = new naver.maps.InfoWindow({
-				content : ['<div class="card">',
-					'<div class="card-body text-center">',
-					'<h4 class="card-title">'+userid+'</h4>',
-					'<p class="card-text">'+users[userid].address+'</p>',
-					'<p class="card-text">용량 : '+users[userid].cap+'%</p>',
-					'<button class="btn btn-dark m-1">수거</button>',
-					'<button class="btn btn-danger m-1">취소</button>',
-					'</div>',
-				'</div>'].join('') 
+			contentString = ['<div class="card">',
+				'<div class="card-body text-center">',
+				'<h4 class="card-title">' + users[userid].userid + '</h4>',
+				'<p class="card-text">' + users[userid].address +'</p>',
+				'<p class="card-text">용량 : ' + users[userid].cap + '%</p>',
+				'<button id="info-plus-btn" class="btn btn-dark m-1">수거</button>',
+				'<button id="info-cancle-btn" class="btn btn-danger m-1">취소</button>',
+				'</div>',								
+				'</div>'].join('');
+			
+			var infoWindow = new naver.maps.InfoWindow({
+				content : contentString 
 			});
 			
 			users[userid].cap = jsonMsg.cap;
@@ -215,17 +235,34 @@ a:visited {
 			// 기존 마커 리스너를 삭제하고 새로운 마커 리스너를 생성 후 InfoWindow 객체를 등록
 			naver.maps.Event.clearInstanceListeners(users[userid].marker);
 			naver.maps.Event.addListener(users[userid].marker, 'click', function(e) {			
-				if(users[userid].infoWindow.getMap()) {
-					users[userid].infoWindow.close();
+				var infoWindowElement;
+				
+				// 맵에 마커의 윈도우창이 열려있으면
+				if(infoWindow.getMap()) {
+					infoWindowElement = infoWindow.getElement();
+					$(infoWindowElement).off('click', '#info-plus-btn');
+					$(infoWindowElement).off('click', '#info-cancle-btn');
+					infoWindow.close();
 				} else {
-					users[userid].infoWindow.open(map, users[userid].marker);
+					infoWindow.open(map, users[userid].marker);			
+					infoWindowElement = infoWindow.getElement();
+					$(infoWindowElement).off('click', '#info-plus-btn');
+					$(infoWindowElement).off('click', '#info-cancle-btn');
+					$(infoWindowElement).on('click', '#info-plus-btn', function() {
+						alert(users[userid].userid);
+					});
+					
+					$(infoWindowElement).on('click', '#info-cancle-btn', function() {
+						alert(users[userid].userid);
+						infoWindow.close();	
+					});
 				}
 			});
 			
-			if(users[userid].infoWindow.getMap()) {
-				users[userid].infoWindow.close();
+			if(infoWindow.getMap()) {
+				infoWindow.close();
 			} else {
-				users[userid].infoWindow.open(map, users[userid].marker);
+				infoWindow.open(map, users[userid].marker);
 			}
 		}
 		
@@ -250,6 +287,10 @@ a:visited {
 		$('#right-btn').click(function() {
 			alert('▷');
 			socket.send('{"type":"direction","message":"turnright"}');
+		});
+		$('#stop-btn').click(function() {
+			alert('STOP');
+			socket.send('{"type":"direction","message":"stop"}');
 		});
 		
 	});	
@@ -299,8 +340,6 @@ a:visited {
 					class="fas fa-location-arrow"></i> 관제</a></li>
 			<li class="nav-item"><a class="nav-link" href="#"><i
 					class="fas fa-history"></i> 이용현황</a></li>
-			<!-- <li class="nav-item"><a class="nav-link disabled" href="#">Disabled</a>
-			</li> -->
 		</ul>
 
 		<div class="jumbotron mt-5 text-center">
@@ -315,18 +354,34 @@ a:visited {
 				수신 메시지 : <span id="recv-message"></span>
 			</div>
 			<br />
-			<h4>차량 카메라</h4>
-			<br /> <img src="${contextPath}/camera/1" class="mx-auto d-block"
-				style="width: 100%; height: 600px;" /> <br />
-			<h4>수동조작</h4>
-			<br />
-			<button id="forward-btn" type="button" class="btn btn-dark"><i class="fas fa-arrow-up"></i></button>
-			<br />
-			<button id="left-btn" type="button" class="btn btn-dark mt-1"><i class="fas fa-arrow-left"></i></button>
-			<button id="back-btn" type="button" class="btn btn-dark mt-1"><i class="fas fa-redo"></i></button>
-			<button id="right-btn" type="button" class="btn btn-dark mt-1"><i class="fas fa-arrow-right"></i></button>
-			<br />
-			<button id="stop-btn" type="button" class="btn btn-danger mt-1"><i class="far fa-stop-circle"></i></button>
+			<div class="row">
+				<div class="col-md-8">
+					<h4>차량 카메라</h4>
+					<br /> <img src="${contextPath}/camera/1" class="mx-auto d-block"
+						style="width: 100%; height: 400px;" /> <br />
+				</div>
+				<div class="col-md-4">
+					<h4>수동조작</h4>
+					<br /> <br /> <br /> <br /> <br />
+					<button id="forward-btn" type="button" class="btn btn-dark">
+						<i class="fas fa-arrow-up"></i>
+					</button>
+					<br />
+					<button id="left-btn" type="button" class="btn btn-dark mt-1">
+						<i class="fas fa-arrow-left"></i>
+					</button>
+					<button id="back-btn" type="button" class="btn btn-dark mt-1">
+						<i class="fas fa-redo"></i>
+					</button>
+					<button id="right-btn" type="button" class="btn btn-dark mt-1">
+						<i class="fas fa-arrow-right"></i>
+					</button>
+					<br />
+					<button id="stop-btn" type="button" class="btn btn-danger mt-1">
+						<i class="far fa-stop-circle"></i>
+					</button>
+				</div>
+			</div>
 		</div>
 	</div>
 </body>
