@@ -31,6 +31,7 @@ public class User {
 	double cap;
 	double lat;
 	double lon;
+	String condition;
 	Date regDate;
 	Date updateDate;
 }

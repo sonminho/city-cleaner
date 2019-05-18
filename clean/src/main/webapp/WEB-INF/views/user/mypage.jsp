@@ -24,7 +24,7 @@
 
 <body>
 	<nav class="navbar navbar-expand-sm bg-dark navbar-dark">
-		<a class="navbar-brand" href="/clean"><i class="fas fa-recycle"></i>
+		<a class="navbar-brand" href="/clean"><i class="fas fa-recycle"></i>&nbsp;
 			깨끗한도시</a>
 		<button class="navbar-toggler" data-toggle="collapse"
 			data-target="#collapsibleNavbar">

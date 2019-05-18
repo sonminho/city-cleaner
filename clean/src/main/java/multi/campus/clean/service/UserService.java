@@ -22,4 +22,7 @@ public interface UserService {
 	
 	// 쓰레기통이 설치된 사용자 조회
 	List<User> getUsers() throws Exception;
+	
+	// 수십중인 쓰레기통 조회
+	List<User> getCollectingList() throws Exception;
 }

@@ -6,8 +6,8 @@
 	</select>
 	
 	<select id="getPage" resultType="User">
-		select userid, is_admin, passwd, email, address, lat, lon, bin, phone, reg_date, update_date 
-		from (select row_number() over(order by reg_date desc) as seq, userid, is_admin, passwd, email, address, lat, lon, bin, phone, reg_date, update_date from clean_user)
+		select userid, is_admin, passwd, email, address, lat, lon, bin, phone, condition, reg_date, update_date 
+		from (select row_number() over(order by reg_date desc) as seq, userid, is_admin, passwd, email, address, lat, lon, bin, phone, condition, reg_date, update_date from clean_user)
 		where seq between #{start} and #{end} and is_admin=0
 	</select>
 	
@@ -29,11 +29,16 @@
 		 LAT=#{lat}, 
 		 LON=#{lon},
 		 CAP=#{cap},
-		 PHONE=#{phone} 
+		 PHONE=#{phone},
+		 CONDITION=#{condition} 
 		WHERE USERID=#{userid}
 	</update>
 	
 	<select id="getUsers" resultType="User">
 		SELECT * FROM CLEAN_USER WHERE BIN = 1 AND IS_ADMIN=0
+	</select>
+	
+	<select id="getCollectingList" resultType="User">
+		select * from clean_user where bin = 1 and condition = 'collecting'
 	</select>
 </mapper>

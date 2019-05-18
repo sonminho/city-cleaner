@@ -56,4 +56,9 @@ public class UserServiceImpl implements UserService {
 		return dao.getUsers();
 	}
 
+	@Override
+	public List<User> getCollectingList() throws Exception {
+		return dao.getCollectingList();
+	}
+
 }

@@ -25,9 +25,10 @@ import multi.campus.clean.service.UserService;
 @Controller
 @Slf4j
 public class AdminContorller {
-	
 	@Autowired
 	UserService userService;
+	
+	Gson gson = new Gson();
 	
 	@GetMapping("/admin")
 	public String getAdmin() {
@@ -88,4 +89,30 @@ public class AdminContorller {
 		}
 	}
 	
+	@GetMapping("/admin/collectingList")
+	@ResponseBody
+	public ResponseEntity<ResultMsg> getCollectingList(Model model) throws Exception {
+		List<User> collectingList = userService.getCollectingList();
+		Gson gson = new Gson();
+		
+		if(collectingList.size() > 0) {
+			model.addAttribute("collectingList", gson.toJson(collectingList));
+			return ResultMsg.response("ok", gson.toJson(collectingList));
+		} else {
+			return ResultMsg.response("fail", gson.toJson(collectingList));
+		}
+	}
+	
+	@PostMapping("/admin/updateCollectingList")
+	@ResponseBody
+	public ResponseEntity<ResultMsg> postUpdateCollectingList(@RequestBody User user) throws Exception {
+		String updateCondition = user.getCondition();
+		User updatedUser = userService.getUser(user.getUserid());
+		updatedUser.setCondition(updateCondition);
+		
+		if(userService.update(updatedUser) > 0) {
+			return ResultMsg.response("ok", "리스트 추가 성공");
+		} else
+			return ResultMsg.response("fail", "리스트 추가 실패");
+	}
 }

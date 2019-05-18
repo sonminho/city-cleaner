@@ -9,18 +9,9 @@
 <title>Home</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <style>
-a:link {
-	color: black;
-}
-
-a:visited {
-	color: black;
-}
-
 .page-item.active .page-link {
 	background-color: #495057;
 }
-
 </style>
 </head>
 <link rel="stylesheet"
@@ -57,7 +48,7 @@ a:visited {
 			<c:if test="${not empty ADMIN}">
 				<ul class="nav navbar-nav float-lg-right">
 					<li class="nav-item mr-sm-2"><a class="nav-link"
-						href="${contextPath}/admin/"> <i class="fas fa-user"></i>${ADMIN.userid}</a></li>
+						href="${contextPath}/admin/"> <i class="fas fa-user"></i>&nbsp;${ADMIN.userid}</a></li>
 
 					<li class="nav-item mr-sm-2"><a class="nav-link"
 						href="${contextPath}/user/logout"> <i
@@ -73,17 +64,17 @@ a:visited {
 			<li class="nav-item"><a class="nav-link active"
 				href="${contextPath}/admin/list"><i class="fas fa-user-friends"></i>
 					사용자 목록</a></li>
-			<li class="nav-item"><a class="nav-link"
-				href="${contextPath}/admin/monitor"><i
-					class="fas fa-location-arrow"></i> 관제</a></li>
-			<li class="nav-item"><a class="nav-link" href="#"><i
-					class="fas fa-history"></i> 이용현황</a></li>
+			<li class="nav-item"><a style="color:black;" class="nav-link"
+				href="${contextPath}/admin/monitor">
+					<i class="fas fa-location-arrow"></i> 관제</a></li>
+			<li class="nav-item"><a style="color:black;" class="nav-link" href="#">
+					<i class="fas fa-history"></i> 이용현황</a></li>
 			<!-- <li class="nav-item"><a class="nav-link disabled" href="#">Disabled</a>
 			</li> -->
 		</ul>
 
 		<div class="jumbotron mt-5">
-			<table class="table text-center">
+			<table class="table table-dark table-striped text-center">
 				<thead class="thead-dark">
 					<tr>
 						<th><i class="fas fa-user-friends"></i> 사용자</th>
@@ -96,7 +87,7 @@ a:visited {
 				</thead>
 				<c:forEach var="user" items="${pi.list}" varStatus="status">
 					<tr>
-						<td><a href="${contextPath}/admin/edit/${user.userid}">${user.userid}</a></td>
+						<td><a style="color:white;" href="${contextPath}/admin/edit/${user.userid}">${user.userid}</a></td>
 						<td>${user.address}</td>
 						<td>${user.lat}</td>
 						<td>${user.lon}</td>
@@ -110,7 +101,7 @@ a:visited {
 					</tr>
 				</c:forEach>
 			</table>
-
+			<br/>
 			<ul class="pagination pagination-md justify-content-center mt-4">
 				<c:forEach var="idx" begin="1" end="${pi.totalPage }">
 					<c:choose>

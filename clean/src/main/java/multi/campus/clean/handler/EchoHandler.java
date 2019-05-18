@@ -26,33 +26,33 @@ public class EchoHandler extends TextWebSocketHandler {
 	@Override
 	protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
 		String rcvMsg = message.getPayload();
-		System.out.println("페이로드 > " + rcvMsg);
+		//System.out.println("페이로드 > " + rcvMsg);
 		HandleMsg handleMsg = gson.fromJson(rcvMsg, HandleMsg.class);
 		String msgType = handleMsg.getType();
 
-		System.out.println("다음 메시지를 수신함 > " + handleMsg);
-		System.out.println("세션 > " + session);
-		System.out.println("핸들 메시지 > " + handleMsg.getMessage());
-		System.out.println("메시지 타입 > " + handleMsg.getType());
+//		System.out.println("다음 메시지를 수신함 > " + handleMsg);
+//		System.out.println("세션 > " + session);
+//		System.out.println("핸들 메시지 > " + handleMsg.getMessage());
+//		System.out.println("메시지 타입 > " + handleMsg.getType());
 
 		if (msgType.equals("browser")) {
-			System.out.println("브라우저 세션을 추가합니다." + session);
+			//System.out.println("브라우저 세션을 추가합니다." + session);
 
 			if (map.get(session.getId()) == null)
 				map.put(session.getId(), session);
 		} else if (msgType.equals("initializingCar")) {
 			carSession = session;
-			System.out.println("차량의 정보를 얻습니다." + session);
+			//System.out.println("차량의 정보를 얻습니다." + session);
 
 			carIp = handleMsg.getMessage();
 
 			if (carSession != null)
 				carSession.sendMessage(new TextMessage("서버와 파이가 연결되었습니다!!"));
 		} else if (msgType.equals("direction")) {
-			System.out.println("파이로 보낼 메세지 > " + rcvMsg);
+			//System.out.println("파이로 보낼 메세지 > " + rcvMsg);
 			carSession.sendMessage(new TextMessage(rcvMsg));
 		} else if (msgType.equals("binData")) {
-			System.out.println("브라우저 사이즈 > " + map.size());
+			//System.out.println("브라우저 사이즈 > " + map.size());
 			TextMessage sendMsg = new TextMessage(rcvMsg);
 
 			Iterator<String> keys = map.keySet().iterator();
@@ -66,13 +66,13 @@ public class EchoHandler extends TextWebSocketHandler {
 				if (ws.isOpen()) {
 					ws.sendMessage(sendMsg);
 				} else {
-					System.out.println("닫힐 소켓 > " + ws.getId());
+					//System.out.println("닫힐 소켓 > " + ws.getId());
 					removeList.add(ws.getId());
 				}
 			}
 
 			for (String removeWebSocketId : removeList) {
-				System.out.println("소켓을 닫습니다 > " + removeWebSocketId);
+				//System.out.println("소켓을 닫습니다 > " + removeWebSocketId);
 				map.remove(removeWebSocketId);
 			}
 		}

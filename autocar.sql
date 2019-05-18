@@ -1,4 +1,5 @@
 drop table clean_user;
+
 CREATE TABLE clean_user (
   userid varchar(20) not null primary key,
   is_admin number default(0),
@@ -11,6 +12,7 @@ CREATE TABLE clean_user (
   lat number default(0.0),
   lon number default(0.0),
   phone varchar(30),
+  condition varchar(30) default('waiting'),
   REG_DATE DATE DEFAULT(SYSDATE),
   UPDATE_DATE DATE DEFAULT(SYSDATE)
 );
@@ -24,7 +26,7 @@ CREATE TABLE garbage_collection (
 );
 
 INSERT INTO CLEAN_USER (userid, passwd, email, address, lat, lon, reg_date, update_date) 
-values ('abc', '1234', 's@naver.com', '서울시', 37.1, 23.4, sysdate, sysdate);
+values ('abc', '1234', 's@naver.com', '서울시', 0, 0, sysdate, sysdate);
 INSERT INTO CLEAN_USER (userid, passwd, email, address, lat, lon, reg_date, update_date) 
 values ('abcd', '1234', 's@naver.com', '서울시', 37.1, 23.4, sysdate, sysdate);
 select * from clean_user;
@@ -56,8 +58,5 @@ UPDATE CLEAN_USER SET
 		WHERE USERID='abc';
     rollback;
 
-select * from clean_user where bin = 0 AND IS_ADMIN = 0;
-update (select * from clean_user where bin = 0) set is_admin = 1;
-commit;
-insert into clean_user(userid, passwd, email, is_admin) values ('admin', '1234', 'admin@gmail.com', 1);
+update (select * from clean_user where bin = 1 and condition = 'collecting') set condition='waiting';
 commit;
