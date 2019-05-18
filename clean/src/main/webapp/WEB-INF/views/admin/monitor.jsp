@@ -55,8 +55,6 @@ a:visited {
 		alert('updateFunctionWindow!!!');
 		var userid = user.userid;
 		
-		var marker = users[userid].marker;
-		
 		var contentString = ['<div class="card">',
 			'<div class="card-body text-center">',
 				'<h4 class="card-title">'+user.userid+'</h4>',
@@ -71,9 +69,7 @@ a:visited {
 		var infoWindow = new naver.maps.InfoWindow({
 			content : contentString
 		});
-		
-		users[user.userid].marker = marker;
-		
+				
 		console.log('-----------cccc-----------------');
 		console.log(users[userid].infoWindow);
 		console.log(users[userid].marker);
@@ -96,13 +92,13 @@ a:visited {
 				$(infoWindowElement).off('click', '#info-cancle-btn');
 				$(infoWindowElement).on('click', '#info-plus-btn', function() {
 					alert(users[userid].userid);
-					$('#condition-table').updateCollectingList(users[userid], 'collecting');
+					$('#condition-table').updateCollectingList(map, infoWindow, users, users[userid], 'collecting');
 					infoWindow.close();
 				});
 				
 				$(infoWindowElement).on('click', '#info-cancle-btn', function() {
 					alert(users[userid].userid + "닫힘");
-					$('#condition-table').updateCollectingList(users[userid], 'waiting');
+					$('#condition-table').updateCollectingList(map, infoWindow, users, users[userid], 'waiting');
 					infoWindow.close();
 				});
 			}
