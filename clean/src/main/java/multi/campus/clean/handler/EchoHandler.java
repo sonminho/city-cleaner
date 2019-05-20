@@ -26,7 +26,7 @@ public class EchoHandler extends TextWebSocketHandler {
 	@Override
 	protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
 		String rcvMsg = message.getPayload();
-		//System.out.println("페이로드 > " + rcvMsg);
+		System.out.println("페이로드 > " + rcvMsg);
 		HandleMsg handleMsg = gson.fromJson(rcvMsg, HandleMsg.class);
 		String msgType = handleMsg.getType();
 

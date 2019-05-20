@@ -16,10 +16,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.google.gson.Gson;
 
 import lombok.extern.slf4j.Slf4j;
+import multi.campus.clean.domain.GarbageCollection;
 import multi.campus.clean.domain.HandleMsg;
 import multi.campus.clean.domain.PageInfo;
 import multi.campus.clean.domain.ResultMsg;
 import multi.campus.clean.domain.User;
+import multi.campus.clean.service.GarbageCollectionService;
 import multi.campus.clean.service.UserService;
 
 @Controller
@@ -27,6 +29,9 @@ import multi.campus.clean.service.UserService;
 public class AdminContorller {
 	@Autowired
 	UserService userService;
+	
+	@Autowired
+	GarbageCollectionService garbageCollectionService;
 	
 	Gson gson = new Gson();
 	
@@ -45,7 +50,8 @@ public class AdminContorller {
 	
 	@GetMapping("/admin/edit/{userid}")
 	public String getEdit(@PathVariable String userid,Model model) throws Exception {
-		User user = userService.getUser(userid);		
+		User user = userService.getUser(userid);
+		System.out.println("수정할 회원> "+ user);
 		model.addAttribute("user", user);
 		
 		return "admin/edit";
@@ -114,5 +120,14 @@ public class AdminContorller {
 			return ResultMsg.response("ok", "리스트 추가 성공");
 		} else
 			return ResultMsg.response("fail", "리스트 추가 실패");
+	}
+	
+	@GetMapping("/admin/collection-list")
+	public String getCollectionList(@RequestParam(value="page", defaultValue="1") int page, Model model) throws Exception {
+		PageInfo<GarbageCollection> pi = garbageCollectionService.getPage(page);
+		model.addAttribute("pi", pi);	
+		
+		System.out.println("수집 리스트 사이즈 " + pi);
+		return "admin/collection-list";
 	}
 }

@@ -25,8 +25,7 @@ public class UserServiceImpl implements UserService {
 		
 		int totalCount = dao.count();
 		List<User> list = dao.getPage(start, end);
-		
-		
+				
 		return new PageInfo<>(totalCount, (int)Math.ceil(totalCount / (double)PER_PAGE_COUNT), page, PER_PAGE_COUNT, list);		
 	}
 	

@@ -82,7 +82,7 @@ a:visited {
 			<form:form modelAttribute="user">
 				<form:hidden path="userid" class="form-contorl" />
 				<form:hidden path="passwd" class="form-contorl" />
-
+				<form:hidden path="condition" class="form-contorl" />
 				<div class="form-group m-4">
 					<h4>
 						<i class="fas fa-user"></i> ${user.userid}

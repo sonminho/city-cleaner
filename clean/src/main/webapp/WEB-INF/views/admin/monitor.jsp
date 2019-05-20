@@ -52,7 +52,6 @@ a:visited {
 	}
 	
 	$.fn.updateInfoWindow = function(map, infoWindow, users, user) {
-		alert('updateFunctionWindow!!!');
 		var userid = user.userid;
 		
 		var contentString = ['<div class="card">',
@@ -60,7 +59,7 @@ a:visited {
 				'<h4 class="card-title">'+user.userid+'</h4>',
 				'<p class="card-text">'+user.address+'</p>',
 				'<p class="card-text">용량 : '+user.cap+'L</p>',
-				'<p class="card-text">상태 : ' + user.condition + '!!!!!!</p>',
+				'<p class="card-text">상태 : ' + user.condition + '</p>',
 				'<button id="info-plus-btn" class="btn btn-dark m-1">수거</button>',
 				'<button id="info-cancle-btn" class="btn btn-danger m-1">취소</button>',
 			'</div>',								
@@ -69,13 +68,9 @@ a:visited {
 		var infoWindow = new naver.maps.InfoWindow({
 			content : contentString
 		});
-				
-		console.log('-----------cccc-----------------');
-		console.log(users[userid].infoWindow);
-		console.log(users[userid].marker);
-		console.log(users[userid].condition);
-		console.log('-----------bbbb------------');
-					
+		
+		// 기존 마커 리스너를 삭제하고 새로운 마커 리스너를 생성 후 InfoWindow 객체를 등록
+		naver.maps.Event.clearInstanceListeners(users[userid].marker);
 		naver.maps.Event.addListener(users[userid].marker, 'click', function(e) {			
 			var infoWindowElement;
 			
@@ -124,8 +119,6 @@ a:visited {
 					list = JSON.parse(response.message);
 					
 					$.each(list, function(index, user) {
-						console.log($('#condition-table > tbody:last'));
-						
 						var rowItem = "<tr>";
 						rowItem += "<td>" + user.userid + "</td>";
 						rowItem += "<td>" + user.address + "</td>";
@@ -287,12 +280,13 @@ a:visited {
 			var contentString;
 			var jsonMsg = JSON.parse(msg.data);
 			var userid = jsonMsg.userid;
+			var user = users[userid];
 			var marker = users[userid].marker;			
 			users[userid].cap = jsonMsg.cap;
 			
 			var updateUserCap = {
 					userid : userid,
-					cap : users[userid].cap
+					cap : jsonMsg.cap
 			};			
 			
 			// 쓰레기통 용량 업데이트
@@ -359,6 +353,11 @@ a:visited {
 			users[userid].cap = jsonMsg.cap;
 			users[userid].marker = marker;
 			
+			if(infoWindow.getMap()) {
+				infoWindow.close();
+			} else {
+				infoWindow.open(map, users[userid].marker);
+			}
 			// 기존 마커 리스너를 삭제하고 새로운 마커 리스너를 생성 후 InfoWindow 객체를 등록
 			naver.maps.Event.clearInstanceListeners(users[userid].marker);
 			naver.maps.Event.addListener(users[userid].marker, 'click', function(e) {			
@@ -377,13 +376,16 @@ a:visited {
 					$(infoWindowElement).off('click', '#info-cancle-btn');
 					$(infoWindowElement).on('click', '#info-plus-btn', function() {
 						alert(users[userid].userid);
+						$('#map').updateInfoWindow(map, infoWindow, users, user);
+						infoWindow.close();
 					});
 					
 					$(infoWindowElement).on('click', '#info-cancle-btn', function() {
 						alert(users[userid].userid);
-						infoWindow.close();	
+						$('#map').updateInfoWindow(map, infoWindow, users, user);
+						infoWindow.close();
 					});
-				}
+				}				
 			});
 			/* if(infoWindow.getMap()) {
 				infoWindow.close();
@@ -394,8 +396,8 @@ a:visited {
 		
 		$('#send-btn').click(function() {
 			var msg = $('#send-message').val();
-			console.log('{"type":"binData", "message":"", "userid":"abc2", "cap":40}');
-			socket.send('{"type":"binData", "message":"", "userid":"abc2", "cap":40}');
+			console.log(msg);
+			socket.send(msg);
 		});
 		
 		$('#forward-btn').click(function() {
@@ -458,13 +460,13 @@ a:visited {
 
 	<div class="container mt-5">
 		<ul class="nav nav-tabs nav-justified">
-			<li class="nav-item"><a class="nav-link"
+			<li class="nav-item"><a style="color:black;" class="nav-link"
 				href="${contextPath}/admin/list"><i class="fas fa-user-friends"></i>
 					사용자 목록</a></li>
-			<li class="nav-item"><a class="nav-link active"
+			<li class="nav-item"><a style="background-color: #98bce4; color:black;" class="nav-link active"
 				href="${contextPath}/admin/monitor"><i
 					class="fas fa-location-arrow"></i> 관제</a></li>
-			<li class="nav-item"><a class="nav-link" href="#"><i
+			<li class="nav-item"><a style="color:black; " class="nav-link" href="${contextPath}/admin/collection-list"><i
 					class="fas fa-history"></i> 이용현황</a></li>
 		</ul>
 
