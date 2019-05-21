@@ -61,7 +61,7 @@
 
 	<div class="container mt-5">
 		<ul class="nav nav-tabs nav-justified">
-			<li class="nav-item"><a style="background-color: #98bce4; color:black;" class="nav-link active"
+			<li class="nav-item"><a style="background-color: #ffc107; color:black;" class="nav-link active"
 				href="${contextPath}/admin/list"><i class="fas fa-user-friends"></i>
 					사용자 목록</a></li>
 			<li class="nav-item"><a style="color:black;" class="nav-link"
@@ -99,7 +99,7 @@
 					</tr>
 				</c:forEach>
 			</table>
-			<br/>
+			
 			<ul class="pagination pagination-md justify-content-center mt-4">
 				<c:forEach var="idx" begin="1" end="${pi.totalPage }">
 					<c:choose>

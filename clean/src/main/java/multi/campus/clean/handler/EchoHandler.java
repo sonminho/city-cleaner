@@ -51,8 +51,8 @@ public class EchoHandler extends TextWebSocketHandler {
 		} else if (msgType.equals("direction")) {
 			//System.out.println("파이로 보낼 메세지 > " + rcvMsg);
 			carSession.sendMessage(new TextMessage(rcvMsg));
-		} else if (msgType.equals("binData")) {
-			//System.out.println("브라우저 사이즈 > " + map.size());
+		} else if (msgType.equals("binData") || msgType.equals("collectedData")) {
+			System.out.println("bin or collectedData ");
 			TextMessage sendMsg = new TextMessage(rcvMsg);
 
 			Iterator<String> keys = map.keySet().iterator();

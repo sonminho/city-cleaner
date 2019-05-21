@@ -105,9 +105,6 @@ public class UserContorller {
 		return "redirect:/";
 	}
 
-	/*
-	 * Ajax request from join.jsp 사용자 아이디 중복확인
-	 */
 	@GetMapping("/user/id-check/{userid}")
 	@ResponseBody
 	public ResponseEntity<ResultMsg> checkId(@PathVariable String userid) throws Exception {
@@ -129,9 +126,7 @@ public class UserContorller {
 	}
 	
 	@GetMapping("/user/mypage/{userid}")
-	public String getMyPage(@PathVariable String userid) throws Exception {
-		
-		
+	public String getMyPage(@PathVariable String userid) throws Exception {		
 		return "/user/mypage";
 	}
 }

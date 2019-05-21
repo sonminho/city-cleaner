@@ -12,6 +12,7 @@ import lombok.NoArgsConstructor;
 public class GarbageCollection {
 	int collectionNo;
 	String userid;
-	int cap;
+	double cap;
+	String address;
 	Date emptyDate;
 }

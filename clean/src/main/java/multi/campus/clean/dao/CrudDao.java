@@ -11,7 +11,7 @@ public interface CrudDao<M, K> {
 	
 	M findById(K k) throws Exception;
 	
-	int insert(M m) throws Exception;
+	Integer insert(M m) throws Exception;
 	
 	int update(M m) throws Exception;
 	

@@ -23,14 +23,15 @@ CREATE TABLE garbage_collection (
   collection_no number primary key,
   userid varchar(20) not null,
   cap number default(0),
+  address varchar(100),
   empty_date date default(sysdate)
 );
+DROP SEQUENCE collection_seq;
 CREATE SEQUENCE collection_seq;
 
-
+select * from clean_user;
+select * from GARBAGE_COLLECTION;
 delete from garbage_collection;
 commit;
-insert into garbage_collection (collection_no, userid) values(collection_seq.nextval, 'gs25');
-commit;
-select collection_no, userid, cap, empty_date
-from (select row_number() over(order by collection_no desc) as seq, collection_no, userid, cap, empty_date from garbage_collection) where seq between 1 and 10;
+
+insert into garbage_collection (collection_no, userid, address, cap) values(collection_seq.nextval, 'wooribank', '서울특별시 강남구 역삼2동 726', 50);

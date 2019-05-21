@@ -60,8 +60,8 @@ public class MvcConfig implements WebMvcConfigurer {
 			.addPathPatterns(new String[] {"/user/mypage/*"})
 			.excludePathPatterns(new String[] {"/"});
 
-		registry.addInterceptor(adminInterceptor())
-			.addPathPatterns(new String[] {"/admin/**" })
-			.excludePathPatterns(new String[] {});
+//		registry.addInterceptor(adminInterceptor())
+//			.addPathPatterns(new String[] {"/admin/**" })
+//			.excludePathPatterns(new String[] {});
 	}
 }
