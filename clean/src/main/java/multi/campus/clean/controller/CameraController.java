@@ -14,6 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import multi.campus.clean.broker.MjpegBroker;
 
+// 주행 영상처리
 @Controller
 public class CameraController {
 	

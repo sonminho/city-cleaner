@@ -44,9 +44,10 @@ abstract public class MjpegView extends AbstractView {
 		OutputStream os = response.getOutputStream();
 		
 		try {
+			System.out.println("이미지 수신 시작");
 			while (true) {
 				byte[] image = getImage();
-				System.out.println(image);
+				
 				sendImage(os, image);
 			}
 		} catch (Exception e) {

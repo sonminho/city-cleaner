@@ -26,7 +26,8 @@ import multi.campus.clean.service.UserService;
 public class UserContorller {
 	@Autowired
 	UserService service;
-
+	
+	// 로그인
 	@GetMapping("/user/login")
 	public String getLogin(LoginInfo loginInfo, @ModelAttribute("target") String target,
 			@ModelAttribute("reason") String reason) {
@@ -83,7 +84,8 @@ public class UserContorller {
 		result.reject("fail", "사용자 아이디 또는 비밀번호가 일치하지 않습니다.");		
 		return "/user/login";
 	}
-
+	
+	// 회원가입
 	@GetMapping("/user/join")
 	public String getJoin(User user) {
 		return "/user/join";

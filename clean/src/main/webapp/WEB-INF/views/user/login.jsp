@@ -19,8 +19,22 @@
 	src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script
 	src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js">
-	
 </script>
+<!-- Page font -->
+<link href="https://fonts.googleapis.com/css?family=Noto+Sans+KR&display=swap" rel="stylesheet">
+
+<style>	
+	body{
+		font-family: 'Noto Sans KR', sans-serif;
+	}
+	
+	footer {
+	  position: fixed;
+	  left: 0;
+	  bottom: 0;
+	  width: 100%;
+	}
+</style>
 
 <script>
 	$.fn.cancle = function() {
@@ -44,7 +58,18 @@
 </script>
 
 <body>
-	<nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+	<!-- header -->
+	<header>
+		<nav class="navbar navbar-expand navbar-dark bg-dark">
+		  <div class="container-fluid">
+		    <a class="navbar-brand" href="${contextPath}">
+		    	<img class="img-circle" alt="main_icon" src="${contextPath}/resources/img/truck.png" width="40" height="40">
+		    	깨끗한 도시
+			</a>
+		  </div>
+		</nav>
+	</header>
+	<!-- <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
 		<a class="navbar-brand" href="/clean"><i class="fas fa-recycle"></i>&nbsp;깨끗한도시</a>
 		<button class="navbar-toggler" data-toggle="collapse"
 			data-target="#collapsibleNavbar">
@@ -61,7 +86,7 @@
 			</ul>
 		</div>
 	</nav>
-	<br/>
+ -->	<br/>
 	<div class="container">
 		<div class="jumbotron">
 			<h3 class="m-3">
@@ -94,5 +119,23 @@
 			</form:form>
 		</div>
 	</div>
+	
+	<!-- footer -->
+	<footer class="bg-dark mt-5 p-3 text-white">
+		<div class="container-fluid">
+			<div class="row">
+				<div class="col-sm-6">
+					깨끗한 도시 &copy; 2019.05.23
+				</div>
+				<div class="col-sm-6 text-right">
+						Design by <a
+							href="https://bootstrapious.com/p/bootstrap-4-dashboard"
+							class="external">Bootstrapious</a>
+					
+					<!-- Please do not remove the backlink to us unless you support further theme's development at https://bootstrapious.com/donate. It is part of the license conditions and it helps me to run Bootstrapious. Thank you for understanding :)-->
+				</div>
+			</div>
+		</div>
+	</footer>
 </body>
 </html>

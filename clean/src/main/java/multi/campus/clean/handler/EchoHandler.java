@@ -29,28 +29,26 @@ public class EchoHandler extends TextWebSocketHandler {
 		System.out.println("페이로드 > " + rcvMsg);
 		HandleMsg handleMsg = gson.fromJson(rcvMsg, HandleMsg.class);
 		String msgType = handleMsg.getType();
-
-//		System.out.println("다음 메시지를 수신함 > " + handleMsg);
-//		System.out.println("세션 > " + session);
-//		System.out.println("핸들 메시지 > " + handleMsg.getMessage());
-//		System.out.println("메시지 타입 > " + handleMsg.getType());
-
+		
 		if (msgType.equals("browser")) {
-			//System.out.println("브라우저 세션을 추가합니다." + session);
-
 			if (map.get(session.getId()) == null)
 				map.put(session.getId(), session);
 		} else if (msgType.equals("initializingCar")) {
 			carSession = session;
-			//System.out.println("차량의 정보를 얻습니다." + session);
+			System.out.println("차량의 정보를 얻습니다." + session);
 
 			carIp = handleMsg.getMessage();
 
 			if (carSession != null)
 				carSession.sendMessage(new TextMessage("서버와 파이가 연결되었습니다!!"));
-		} else if (msgType.equals("direction")) {
-			//System.out.println("파이로 보낼 메세지 > " + rcvMsg);
-			carSession.sendMessage(new TextMessage(rcvMsg));
+		} else if (msgType.equals("driving")) {
+			System.out.println("차량 수동 조작 > " + rcvMsg);
+			
+			if(carSession != null) {
+				carSession.sendMessage(new TextMessage(rcvMsg));
+			} else {
+				carSession = null;
+			}
 		} else if (msgType.equals("binData") || msgType.equals("collectedData")) {
 			System.out.println("bin or collectedData ");
 			TextMessage sendMsg = new TextMessage(rcvMsg);
@@ -72,8 +70,32 @@ public class EchoHandler extends TextWebSocketHandler {
 			}
 
 			for (String removeWebSocketId : removeList) {
-				//System.out.println("소켓을 닫습니다 > " + removeWebSocketId);
+				System.out.println("소켓을 닫습니다 > " + removeWebSocketId);
 				map.remove(removeWebSocketId);
+			}
+		} else if (msgType.equals("collectingList")) {
+			System.out.println("수집 리스트 > " + rcvMsg);
+			
+			if (carSession != null) {
+				System.out.println("차에게 다음 메시지를 보냄 > " + handleMsg);
+				carSession.sendMessage(new TextMessage(rcvMsg));
+			} else {
+				carSession = null;
+			}
+		} else if (msgType.equals("termination")) {
+			System.out.println("웹 소켓 종료, 차량 세션을 초기화합니다.");
+			
+			carSession = null;
+		} else if (msgType.equals("state")) {			
+			System.out.println("차량 모드를 "+ handleMsg.getMode() +"로 전환합니다.");
+			
+			if (carSession.isOpen()) {
+				System.out.println("차에게 다음 메시지를 보냄 > " + handleMsg);
+				carSession.sendMessage(new TextMessage(rcvMsg));
+			} else {
+				System.out.println("차에게 다음 메시지를 안!보냄 > " + handleMsg);
+				carSession.close();
+				carSession = null;				
 			}
 		}
 	}

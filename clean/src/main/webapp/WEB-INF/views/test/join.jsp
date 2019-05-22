@@ -6,23 +6,21 @@
 
 <html>
 <head>
-<title>Home</title>
+<meta charset="UTF-8">
+<title>Join</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
-</head>
-<link rel="stylesheet"
-	href="https://use.fontawesome.com/releases/v5.7.2/css/all.css"
-	integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr"
-	crossorigin="anonymous">
-<link rel="stylesheet"
-	href="https://maxcdn.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css">
+
 <!-- Page font -->
 <link href="https://fonts.googleapis.com/css?family=Noto+Sans+KR&display=swap" rel="stylesheet">
-<script
-	src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-<script
-	src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js"></script>
-<script
-	src="https://maxcdn.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js"></script>
+	
+<!-- Script -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js" ></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js"></script>
+
+</head>
 <style>
 	
 	body{
@@ -31,6 +29,7 @@
 	
 
 </style>
+
 <script>
 	$.fn.checkUserId = function() { //사용자 ID 중복 체크 플러그인 
 		var self = this;
@@ -122,8 +121,11 @@
 		});
 	});
 </script>
+
 <body>
-<!-- header -->
+
+
+	<!-- header -->
 	<header>
 		<nav class="navbar navbar-expand navbar-dark bg-dark">
 			<div class="container-fluid">
@@ -135,26 +137,10 @@
 			</div>
 		</nav>
 	</header>
-	<!-- <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
-		<a class="navbar-brand" href="/clean"><i class="fas fa-recycle"></i>&nbsp;깨끗한도시</a>
-		<button class="navbar-toggler" data-toggle="collapse"
-			data-target="#collapsibleNavbar">
-			<span class="navbar-toggler-icon"></span>
-		</button>
 
-		<div class="collapse navbar-collapse flex-row-reverse"
-			id="collapsibleNavbar">
-			<ul class="nav navbar-nav float-lg-right">
-				<li class="nav-item mr-sm-2"><button id="loginBtn"
-						type="button" class="btn btn-light m-1">로그인</button></li>
-				<li class="nav-item mr-sm-2"><button id="joinBtn" type="button"
-						class="btn btn-light m-1">회원가입</button></li>
-			</ul>
-		</div>
-	</nav>
- -->	<br/>
-	<div class="container">
-		<div class="jumbotron">
+	<!-- 회원 가입 폼 -->
+	<div class="jumbotron">
+		<div class="container-fluid  col-md-8 content-justify-center">
 			<h3 class="m-4">
 				<i class="fas fa-user-cog"></i> 회원가입
 			</h3>
@@ -176,7 +162,8 @@
 					<form:errors path="passwd" element="div" cssClass="error" />
 				</div>
 				<div class="form-group m-4">
-					<label for="passwdCheck"><i class="fas fa-lock"></i> 비밀번호 확인</label>
+					<label for="passwdCheck"><i class="fas fa-lock"></i> 비밀번호
+						확인</label>
 					<form:input type="password" path="passwdCheck" class="form-control" />
 					<form:errors path="passwdCheck" element="div" cssClass="error" />
 				</div>
@@ -196,13 +183,14 @@
 					<form:errors path="phone" element="div" cssClass="error" />
 				</div>
 				<div class="container text-center mt-4">
-					<button id="submitBtn" type="submit" class="btn btn-secondary" disabled>회원가입</button>
+					<button id="submitBtn" type="submit" class="btn btn-secondary"
+						disabled>회원가입</button>
 					<button id="cancleBtn" type="button" class="btn btn-danger">다시작성</button>
 				</div>
 			</form:form>
 		</div>
 	</div>
-	
+
 	<!-- footer -->
 	<footer class="mt-5 p-3 bg-dark text-white">
 		<div class="container-fluid">
@@ -219,6 +207,6 @@
 				</div>
 			</div>
 		</div>
-	</footer>
+	</footer>	
 </body>
 </html>

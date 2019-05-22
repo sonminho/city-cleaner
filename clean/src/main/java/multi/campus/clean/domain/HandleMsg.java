@@ -12,5 +12,8 @@ public class HandleMsg {
 	String message;
 	String userid;
 	String address;
+	String garbageList;
+	String mode;
+	String direction;
 	double cap;
 }

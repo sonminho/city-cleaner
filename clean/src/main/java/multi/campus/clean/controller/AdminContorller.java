@@ -121,34 +121,44 @@ public class AdminContorller {
 			}
 		}
 	}
-
+	
+	
+	// 수집 리스트 리턴
 	@GetMapping("/admin/collectingList")
 	@ResponseBody
 	public ResponseEntity<ResultMsg> getCollectingList(Model model) throws Exception {
 		List<User> collectingList = userService.getCollectingList();
 		Gson gson = new Gson();
-
+		int collectSize = collectingList.size();
+		System.out.println("수집중인 리스트 사이즈 >> " + collectSize);
+		model.addAttribute("collectSize", collectSize);
+		
 		if (collectingList.size() > 0) {
 			model.addAttribute("collectingList", gson.toJson(collectingList));
+						
 			return ResultMsg.response("ok", gson.toJson(collectingList));
 		} else {
 			return ResultMsg.response("fail", gson.toJson(collectingList));
 		}
 	}
 
+	// 수집 리스트 업데이트 
 	@PostMapping("/admin/updateCollectingList")
 	@ResponseBody
 	public ResponseEntity<ResultMsg> postUpdateCollectingList(@RequestBody User user) throws Exception {
 		String updateCondition = user.getCondition();
 		User updatedUser = userService.getUser(user.getUserid());
 		updatedUser.setCondition(updateCondition);
-
-		if (userService.update(updatedUser) > 0) {
-			return ResultMsg.response("ok", "리스트 추가 성공");
+		int result = userService.update(updatedUser);
+		List<User> collectingList = userService.getCollectingList();
+		
+		if (result > 0) {
+			return ResultMsg.response("ok", gson.toJson(collectingList));
 		} else
-			return ResultMsg.response("fail", "리스트 추가 실패");
+			return ResultMsg.response("fail", gson.toJson(collectingList));
 	}
 
+	// 수집 리스트에 데이터 추가
 	@PostMapping("/admin/collectedGarbage")
 	@ResponseBody
 	public ResponseEntity<ResultMsg> postCollectedGarbage(@RequestBody GarbageCollection garbageCollection) throws Exception {
@@ -159,6 +169,7 @@ public class AdminContorller {
 		return ResultMsg.response("ok","");
 	}
 	
+	// 수집 리스트 조회
 	@GetMapping("/admin/collection-list")
 	public String getCollectionList(@RequestParam(value = "page", defaultValue = "1") int page, Model model,
 			Search search) throws Exception {
