@@ -33,8 +33,9 @@ a:visited {
 
 <!-- Naver Maps API 키 값 필요 -->
 <script type="text/javascript"
-	src="https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=rbeyz68rf5">
+	src="https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=3ie9gmbxhc">
 </script>
+
 
 <!-- Toggle Switch -->
 <link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
@@ -46,12 +47,30 @@ a:visited {
 <style>
 body{
 		font-family: 'Noto Sans KR', sans-serif;
-}	
+}
+footer {
+	  position: fixed;
+	  left: 0;
+	  bottom: 0;
+	  width: 100%;
+	}
+a:link { color: black; text-decoration: none;}
+
+a:visited { color: black; text-decoration: none;}
 </style>
+
 <script>
-	var socket = new WebSocket("ws://localhost:8080/clean/admin/monitor/data");
+	var socket = new WebSocket("ws://70.12.109.151:8080/clean/admin/monitor/data");
 	var infoWindow;
 	var lastUser;
+	
+	function getCollectingData(type, userid) {
+		var jsonMsg = new Object();
+		jsonMsg.type = type;
+		jsonMsg.userid = userid;
+		
+		return JSON.stringify(jsonMsg);
+	}
 	
 	function getDriveData(type, direction) {
 		var jsonMsg = new Object();
@@ -59,29 +78,6 @@ body{
 		jsonMsg.direction = direction;
 				
 		return JSON.stringify(jsonMsg);
-	}
-	
-	function makeMarker(map, user) {
-		if(user.cap >= 75) {
-			contentColor = '<i class="fas fa-trash-alt fa-lg" style="color:#FD2876;"></i>';
-		} else if(user.cap >= 50) {
-			contentColor = '<i class="fas fa-trash-alt fa-lg" style="color:#F6C501;"></i>';
-		} else {
-			contentColor = '<i class="fas fa-trash-alt fa-lg" style="color:#00FF00;"></i>';
-		}
-		
-		// marker 생성
-		var marker = new naver.maps.Marker({
-			position : new naver.maps.LatLng(user.lat, user.lon),				
-			map : map,
-			icon : {
-				content : contentColor,
-				size : new naver.maps.Size(22, 35),
-				anchor : new naver.maps.Point(11,35)
-			}
-		});
-		
-		return marker;
 	}
 	
 	function getContentString(users, userid) {
@@ -99,36 +95,27 @@ body{
 		return contentString;
 	}
 	
-	function makeInfoWindow(map, infoWindow, users, user) {
-		var userid = user.userid;
+	function makeMarker(map, user) {
+		if(user.cap >= 75) {
+			contentColor = '<i class="fas fa-trash-alt fa-lg" style="color:#FD2876;"></i>';
+		} else if(user.cap >= 40) {
+			contentColor = '<i class="fas fa-trash-alt fa-lg" style="color:#F6C501;"></i>';
+		} else {
+			contentColor = '<i class="fas fa-trash-alt fa-lg" style="color:#00FF00;"></i>';
+		}
 		
-		// 기존 마커 리스너를 삭제하고 새로운 마커 리스너를 생성 후 InfoWindow 객체를 등록
-		naver.maps.Event.clearInstanceListeners(users[userid].marker);
-		naver.maps.Event.addListener(users[userid].marker, 'click', function(e) {			
-			var infoWindowElement;
-
-			// 맵에 마커의 윈도우창이 열려있으면
-			if(infoWindow.getMap()) {
-				infoWindowElement = infoWindow.getElement();
-				$(infoWindowElement).off('click', '#info-plus-btn');
-				$(infoWindowElement).off('click', '#info-cancle-btn');
-				infoWindow.close();
-			} else {
-				infoWindow.open(map, users[userid].marker);					
-				infoWindowElement = infoWindow.getElement();
-				$(infoWindowElement).off('click', '#info-plus-btn');
-				$(infoWindowElement).off('click', '#info-cancle-btn');
-				$(infoWindowElement).on('click', '#info-plus-btn', function() {
-					$('#condition-table').updateCollectingList(map, infoWindow, users, user, 'collecting');
-					infoWindow.close();
-				});
-				
-				$(infoWindowElement).on('click', '#info-cancle-btn', function() {
-					$('#condition-table').updateCollectingList(map, infoWindow, users, user, 'waiting');
-					infoWindow.close();
-				});
+		// marker 생성
+		var marker = new naver.maps.Marker({
+			position : new naver.maps.LatLng(user.lat, user.lon),				
+			map : map,
+			icon : {
+				content : contentColor,
+				size : new naver.maps.Size(22, 35),
+				anchor : new naver.maps.Point(11,35)
 			}
 		});
+		
+		return marker;
 	}
 	
 	$.fn.getUsers = function(map) {
@@ -160,7 +147,7 @@ body{
 	$.fn.loadMap = function() {
 		var mapOptions = {
 				center : new naver.maps.LatLng(37.4999, 127.03739),
-				zoom : 9,
+				zoom : 10,
 				zoomControl : true,
 				zoomControlOptions : {
 					style : naver.maps.ZoomControlStyle.SMALL
@@ -179,11 +166,45 @@ body{
 		});
 		
 		users[userid].marker = makeMarker(map, user);
+		makeInfoWindow(map, infoWindow, users, user);		
 		users[userid].infoWindow = infoWindow;
 		
-		lastUser = userid; 
+		lastUser = userid;
+	}
+	
+	function makeInfoWindow(map, infoWindow, users, user) {
+		var userid = user.userid;
+		users[lastUser].infoWindow.close();
 		
-		makeInfoWindow(map, infoWindow, users, user);
+		// 기존 마커 리스너를 삭제하고 새로운 마커 리스너를 생성 후 InfoWindow 객체를 등록
+		naver.maps.Event.clearInstanceListeners(users[userid].marker);
+		naver.maps.Event.addListener(users[userid].marker, 'click', function(e) {			
+			var infoWindowElement;
+			
+			// 맵에 마커의 윈도우창이 열려있으면
+			if(infoWindow.getMap()) {
+				infoWindowElement = infoWindow.getElement();
+				$(infoWindowElement).off('click', '#info-plus-btn');
+				$(infoWindowElement).off('click', '#info-cancle-btn');
+				infoWindow.close();
+			} else {
+				infoWindow.open(map, users[userid].marker);					
+				infoWindowElement = infoWindow.getElement();
+				$(infoWindowElement).off('click', '#info-plus-btn');
+				$(infoWindowElement).off('click', '#info-cancle-btn');
+				$(infoWindowElement).on('click', '#info-plus-btn', function() {
+					$('#condition-table').updateCollectingList(map, infoWindow, users, user, 'collecting');
+					$('#map').updateInfoWindow(map, infoWindow, users, user);
+					infoWindow.close();
+				});
+				
+				$(infoWindowElement).on('click', '#info-cancle-btn', function() {
+					$('#condition-table').updateCollectingList(map, infoWindow, users, user, 'waiting');
+					$('#map').updateInfoWindow(map, infoWindow, users, user);
+					infoWindow.close();
+				});
+			}
+		});
 	}
 	
 	$.fn.getConditionList = function() {
@@ -206,7 +227,7 @@ body{
 					$('#collectSize').text(list.length);
 					
 					$.each(list, function(index, user) {
-						//socket.send(getDriveData('collectingList', user.userid, 'auto', ''));
+						socket.send(getCollectingData('collectingList', user.userid));
 
 						var rowItem = "<tr>";
 						rowItem += "<td>" + user.userid + "</td>";
@@ -226,7 +247,8 @@ body{
 	
 	$.fn.updateCollectingList = function(map, infoWindow, users, user, condition) {		
 		var data = new Object();
-		data.userid = user.userid;
+		var userid = user.userid;
+		data.userid = userid;
 		data.condition = condition;
 		console.log(data);
 		data = JSON.stringify(data);
@@ -245,8 +267,8 @@ body{
 				if(response.result == 'ok') {
 					$('#collectSize').text(list.length);					
 					$('#condition-table > tbody > tr').remove();
+					users[userid].condition = condition;
 					$('#condition-table').getConditionList();
-					users[user.userid].condition = condition;
 					$('#map').updateInfoWindow(map, infoWindow, users, user);
 				}
 			}
@@ -310,7 +332,7 @@ body{
 						cap : jsonMsg.cap,
 						type : jsonMsg.type,
 						address : jsonMsg.address
-				};			
+				};
 				
 				// 쓰레기통 용량 업데이트
 				$.ajax({
@@ -324,35 +346,25 @@ body{
 						var res = JSON.parse(response);
 						console.log(res);
 						if(res.result == 'ok') {
-							alert('갱신하였습니다');
+							//alert('갱신하였습니다');
 						} else {
 							alert('갱신에 실패하였습니다');
 						}
 					}
-				});			
+				});
+				
+				users[lastUser].infoWindow.close();
 				
 				if(type == 'collectedData') {
 					users[userid].cap = 0;
 					users[userid].condition = "waiting";
-					$('#condition-table').updateCollectingList(map, infoWindow, users, users[userid], 'waiting');
+					$('#condition-table').updateCollectingList(map, users[userid].infoWindow, users, users[userid], 'waiting');
 				} else {
 					users[userid].cap = jsonMsg.cap;
-					$('#condition-table').updateCollectingList(map, infoWindow, users, users[userid], users[userid].condition);
+					$('#condition-table').updateCollectingList(map, users[userid].infoWindow, users, users[userid], users[userid].condition);
 				}
-								
-				users[lastUser].infoWindow.close();
 				
-				$('#map').updateInfoWindow(map, infoWindow, users, user);				
-				/* infoWindow = new naver.maps.InfoWindow({
-					content : getContentString(users, userid)
-				});
-				
-				users[userid].marker = makeMarker(map, user);
-				users[userid].infoWindow = infoWindow;
-				
-				console.log('맵!!!!');
-				console.log(lastUser);
-				makeInfoWindow(map, infoWindow, users, user);  */
+				$('#map').updateInfoWindow(map, infoWindow, users, user);
 			}
 		}
 				
@@ -500,5 +512,19 @@ body{
 			</div>
 		</div>
 	</div>
+	
+	<!-- footer -->
+	<footer class="mt-5 p-3 bg-dark text-white">
+		<div class="container-fluid">
+			<div class="row">
+				<div class="col-sm-6">
+					깨끗한 도시 &copy; 2019.05.23
+				</div>
+				<div class="col-sm-6 text-right">
+					자율주행을 활용한 IoT 개발 전문가
+				</div>
+			</div>
+		</div>
+	</footer>
 </body>
 </html>

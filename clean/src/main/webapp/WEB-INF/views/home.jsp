@@ -72,7 +72,7 @@
 			<c:if test="${not empty ADMIN}">
 				<ul class="nav navbar-nav float-lg-right">
 					<li class="nav-item mr-sm-2"><a class="nav-link"
-						href="${contextPath}/admin/main"> <i class="fas fa-user"></i>${ADMIN.userid}</a></li>
+						href="${contextPath}/admin"> <i class="fas fa-user"></i>${ADMIN.userid}</a></li>
 
 					<li class="nav-item mr-sm-2"><a class="nav-link"
 						href="${contextPath}/user/logout"> <i
@@ -115,7 +115,7 @@
 			</div>
 		</div>
 	</header>
-
+	<br/>
 	<!-- Page Content -->
 	<section id="about">
 		<div class="container">
@@ -123,7 +123,7 @@
 			<h4>우리의 프로젝트 목표는 자율주행 기술을 활용하여 도시 전역의 쓰레기를 효과적으로 수거하는 것입니다.</h4>
 		</div>
 	</section>
-
+	<br/>
 	<section id="services">
 		<div class="container">
 			<div class="row">
@@ -147,6 +147,7 @@
 			</div>
 		</div>
 	</section>
+	
 	<!-- footer -->
 	<footer class="mt-5 p-3 bg-dark text-white">
 		<div class="container-fluid">
@@ -155,15 +156,10 @@
 					깨끗한 도시 &copy; 2019.05.23
 				</div>
 				<div class="col-sm-6 text-right">
-						Design by <a
-							href="https://bootstrapious.com/p/bootstrap-4-dashboard"
-							class="external">Bootstrapious</a>
-					
-					<!-- Please do not remove the backlink to us unless you support further theme's development at https://bootstrapious.com/donate. It is part of the license conditions and it helps me to run Bootstrapious. Thank you for understanding :)-->
+					자율주행을 활용한 IoT 개발 전문가
 				</div>
 			</div>
 		</div>
 	</footer>
-
 </body>
 </html>

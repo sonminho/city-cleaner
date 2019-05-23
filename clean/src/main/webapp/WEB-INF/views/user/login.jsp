@@ -121,18 +121,14 @@
 	</div>
 	
 	<!-- footer -->
-	<footer class="bg-dark mt-5 p-3 text-white">
+	<footer class="mt-5 p-3 bg-dark text-white">
 		<div class="container-fluid">
 			<div class="row">
 				<div class="col-sm-6">
 					깨끗한 도시 &copy; 2019.05.23
 				</div>
 				<div class="col-sm-6 text-right">
-						Design by <a
-							href="https://bootstrapious.com/p/bootstrap-4-dashboard"
-							class="external">Bootstrapious</a>
-					
-					<!-- Please do not remove the backlink to us unless you support further theme's development at https://bootstrapious.com/donate. It is part of the license conditions and it helps me to run Bootstrapious. Thank you for understanding :)-->
+					자율주행을 활용한 IoT 개발 전문가
 				</div>
 			</div>
 		</div>

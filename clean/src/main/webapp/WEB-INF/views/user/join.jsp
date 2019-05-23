@@ -23,13 +23,20 @@
 	src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js"></script>
 <script
 	src="https://maxcdn.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js"></script>
-<style>
-	
+<!-- Page font -->
+<link href="https://fonts.googleapis.com/css?family=Noto+Sans+KR&display=swap" rel="stylesheet">
+
+<style>	
 	body{
 		font-family: 'Noto Sans KR', sans-serif;
 	}
 	
-
+	footer {
+	  position: fixed;
+	  left: 0;
+	  bottom: 0;
+	  width: 100%;
+	}
 </style>
 <script>
 	$.fn.checkUserId = function() { //사용자 ID 중복 체크 플러그인 
@@ -211,11 +218,7 @@
 					깨끗한 도시 &copy; 2019.05.23
 				</div>
 				<div class="col-sm-6 text-right">
-						Design by <a
-							href="https://bootstrapious.com/p/bootstrap-4-dashboard"
-							class="external">Bootstrapious</a>
-					
-					<!-- Please do not remove the backlink to us unless you support further theme's development at https://bootstrapious.com/donate. It is part of the license conditions and it helps me to run Bootstrapious. Thank you for understanding :)-->
+					자율주행을 활용한 IoT 개발 전문가
 				</div>
 			</div>
 		</div>

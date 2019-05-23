@@ -27,10 +27,27 @@
 <script
 	src="https://maxcdn.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js"></script>
 
+<!-- Page font -->
+<link href="https://fonts.googleapis.com/css?family=Noto+Sans+KR&display=swap" rel="stylesheet">
+
+<style>
+body{
+		font-family: 'Noto Sans KR', sans-serif;
+}
+footer {
+	  position: fixed;
+	  left: 0;
+	  bottom: 0;
+	  width: 100%;
+	}
+a:link { color: black; text-decoration: none;}
+
+a:visited { color: black; text-decoration: none;}
+</style>
 <script>
 	$(function() {
 		//$('#select-btn').attr('value', $(this).attr(''));
-		
+		console.log('${pi.list}');
 		var type = '${type}';
 		console.log(type);
 		
@@ -171,5 +188,19 @@
 			</form:form>​​​​​​​
 		</div>
 	</div>
+	
+	<!-- footer -->
+	<footer class="mt-5 p-3 bg-dark text-white">
+		<div class="container-fluid">
+			<div class="row">
+				<div class="col-sm-6">
+					깨끗한 도시 &copy; 2019.05.23
+				</div>
+				<div class="col-sm-6 text-right">
+					자율주행을 활용한 IoT 개발 전문가
+				</div>
+			</div>
+		</div>
+	</footer>
 </body>
 </html>

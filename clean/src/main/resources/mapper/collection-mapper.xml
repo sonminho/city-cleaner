@@ -22,14 +22,14 @@
 	
 	<select id="getUserCollectionPage" resultType="garbageCollection">
 		select collection_no, userid, cap, address, empty_date
-		from (select row_number() over(order by collection_no desc) as seq, collection_no, userid, cap, address, empty_date from garbage_collection) 
-		where seq between #{start} and #{end} and userid like #{userid}
+		from (select row_number() over(order by collection_no desc) as seq, collection_no, userid, cap, address, empty_date from garbage_collection where userid like #{userid}) 
+		where seq between #{start} and #{end}
 	</select>
 	
 	<select id="getRegionCollectionPage" resultType="garbageCollection">
 		select collection_no, userid, cap, address, empty_date
-		from (select row_number() over(order by collection_no desc) as seq, collection_no, userid, cap, address, empty_date from garbage_collection) 
-		where seq between 0 and 10 and address like #{region}
+		from (select row_number() over(order by collection_no desc) as seq, collection_no, userid, cap, address, empty_date from garbage_collection where address like #{region}) 
+		where seq between #{start} and #{end}
 	</select>
 	
 	<select id="insert" parameterType="GarbageCollection">
